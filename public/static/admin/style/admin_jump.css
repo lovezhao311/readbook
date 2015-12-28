@@ -1,0 +1,7 @@
+#system-message { position:fixed; left:200px; top:300px; width:auto; height:38px; line-height:38px; background:#fff; /*border:solid 1px #0099cc;*/ padding:5px; z-index:9999 }
+#system-message .wstatus_s { width:38px; height:38px; float:left; }
+#system-message .wstatus_s1 {  background:url(../images/ico.png) no-repeat left top; }
+#system-message .wstatus_s2 {  background:url(../images/ico.png) no-repeat left bottom; }
+#system-message .wstatus_s3 {  background:url(../images/loading_big.gif) no-repeat center; }
+#system-message .wstatus_s4 {  background:url(../images/ico.png) no-repeat left -38px; }
+#system-message .wstatus_f { padding:0 6px 0 6px; text-align:left; font-size:14px; color:#333; font-family:"微软雅黑"; }

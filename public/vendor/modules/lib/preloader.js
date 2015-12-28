@@ -1,0 +1,2 @@
+/*TMODJS:{"version":7,"md5":"5b8c5da563a3b69729de44b8dbb04ee7"}*/
+define(function(require){return require("../template")("lib/preloader",'<link rel="stylesheet" type="text/css" href="/vendor/jquery/preloader/jquery.preloader.css"> <div id="preloader"> <div id="status"> <i class="iconfont icon-load"></i> </div> </div>')});
