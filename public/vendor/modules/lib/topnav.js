@@ -1,2 +1,0 @@
-/*TMODJS:{"version":3,"md5":"2759072581db44440c32810211ad12fb"}*/
-define(function(require){return require("../template")("lib/topnav",function(a){"use strict";var b=this,c=(b.$helpers,b.$each),d=a.list,e=(a.value,a.i,b.$escape),f="";return c(d,function(a,b){f+=' <li id="d',f+=e(b),f+='" class="thisclass"> <a href="',f+=e(a.href),f+='" target="leftfra" >',f+=e(a.title),f+="</a> </li> "}),new String(f)})});
