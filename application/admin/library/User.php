@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\library;
 
+use app\admin\model\Rule;
 use app\admin\model\User as UserModel;
 use think\Exception;
 
@@ -38,6 +39,23 @@ class User
     public function getUser()
     {
         return $this->_user;
+    }
+    /**
+     * 获取菜单
+     * @method   menu
+     * @DateTime 2017-04-01T18:00:20+0800
+     * @return   [type]                   [description]
+     */
+    public function getMenu()
+    {
+        $rule = $this->_user->rule();
+        if ($rule == null) {
+            $rules = Rule::scope('leftmenu')->select();
+        } else {
+            $rules = $rule->leftmenu()->select();
+        }
+
+        return toTree($rules);
     }
     /**
      * 用户登录

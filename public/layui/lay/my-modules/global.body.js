@@ -19,11 +19,24 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
             if(typeof($obj.name) == 'undefined'){
                 continue;
             }
-            var $str = $obj.name + '=' + $obj.value;
+            var $str = $obj.name + '=' + layui.formValue($obj);
             newArr.push($str);
         }
         return newArr.join('&');
     };
+
+    layui.formValue = function(input){
+        switch($(input).attr('type')){
+            case 'checkbox':
+                if($(input).is(':checked')){
+                    return $(input).val();
+                }
+                break;
+            default:
+                return $(input).val();
+        }
+        return '';
+    }
     /**
      * 菜单
      * @method   rule
@@ -58,10 +71,17 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
             if ($data.code == 0) {
                 // 失败不跳转
                 layer.msg($data.msg, { icon: 5 });
+
+                window.setTimeout(function(){
+                    window.location.href = $data.url;
+                },$data.wait*1000);
             } else if ($data.code == 1) {
                 // 成功跳转
                 layer.msg($data.msg, { icon: 1 });
-                window.location.href = $data.url;
+                window.setTimeout(function(){
+                    window.location.href = $data.url;
+                },$data.wait*1000);
+                
             }
         }
         /**

@@ -2,6 +2,7 @@
 namespace app\admin\library;
 
 use think\Exception;
+use think\exception\ValidateException;
 
 class Controller extends \think\Controller
 {
@@ -21,7 +22,11 @@ class Controller extends \think\Controller
         $data = array_merge($this->request->post('data/a', []), $data);
         $scene = $this->request->controller() . '.' . $scene;
         $this->validateFailException();
-        parent::validate($data, $scene, $message, $batch, $callback);
+        try {
+            parent::validate($data, $scene, $message, $batch, $callback);
+        } catch (ValidateException $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     /**
@@ -39,8 +44,9 @@ class Controller extends \think\Controller
         if (!($query instanceof \think\Model)) {
             throw new Exception("保存失败！");
         }
+        $data = array_merge($this->request->post('data/a', []), $where);
         // 验证数据
-        $this->validate([], $scene);
+        $this->validate($where, $scene);
 
         if ($query->allowField(true)->save($data, $where) === false) {
             $error = $query->getError() ?: '操作失败，请刷新页面重试！';

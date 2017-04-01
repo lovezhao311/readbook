@@ -4,7 +4,6 @@ namespace app\admin\controller;
 use app\admin\library\Controller;
 use app\admin\library\User;
 use think\Exception;
-use think\exception\ValidateException;
 
 class Index extends Controller
 {
@@ -26,12 +25,11 @@ class Index extends Controller
 
             } catch (Exception $e) {
                 $this->error($e->getMessage());
-            } catch (ValidateException $e) {
-                $this->error($e->getError());
             }
 
             $this->success('登录成功', 'index/index');
         }
+        $this->view->engine->layout(true);
         return $this->fetch();
     }
     /**
@@ -42,6 +40,9 @@ class Index extends Controller
      */
     public function index()
     {
+        $this->view->engine->layout(true);
+        $leftmenu = User::instance()->getMenu();
+        $this->assign('list', $leftmenu);
         return $this->fetch();
     }
     /**

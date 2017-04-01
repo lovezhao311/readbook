@@ -12,4 +12,10 @@ return [
         'login_auth' => true,
     ],
 
+    // 模板
+    'template' => [
+        'layout_on' => true,
+        'tpl_cache' => false,
+        'taglib_pre_load' => "\\app\\admin\\taglib\\Form,\\app\\admin\\taglib\\Table",
+    ],
 ];

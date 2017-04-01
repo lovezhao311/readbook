@@ -8,31 +8,18 @@ class Rule extends Validate
     use \app\admin\library\traits\Validate;
 
     protected $rule = [
-        'parent_id|上级菜单' => ['require', 'exist:rule'],
-        'title|菜单标题' => ['require', 'rulename'],
-        'name|菜单标题' => ['require', 'name'],
-    ];
-
-    protected $message = [
-        'parent_id.rule' => '上级菜单不存在！',
-        'title.title' => '菜单标题格式错误',
-        'title.title' => '菜单标题格式错误',
-        'title.title' => '菜单标题格式错误',
+        'parent_id|上级菜单' => ['require', 'existPid:rule'],
+        'title|菜单标题' => ['require', 'chs', 'length:2,10'],
+        'name|url地址' => ['require', 'regex' => '/^[a-zA-Z]{1,20}(\/[a-zA-Z]{1,21})?$/i', 'length:3,21'],
+        'icon|菜单图标' => ['max:50'],
+        'sort|菜单排序' => ['require', 'number'],
+        'islink|是否菜单' => ['accepted'],
+        'isadmin|是否管理员' => ['accepted'],
+        'is_verify|需要验证' => ['accepted'],
     ];
 
     protected $scene = [
-        'add' => ['parent_id', 'name', 'title', 'islink', 'isadmin', 'icon', 'sort'],
+        'add' => ['parent_id', 'title', 'name', 'icon', 'sort', 'islink', 'isadmin', 'is_verify'],
+        'edit' => ['parent_id', 'title', 'name', 'icon', 'sort', 'islink', 'isadmin', 'is_verify'],
     ];
-    /**
-     * 菜单标题
-     * @method   rulename
-     * @DateTime 2017-03-31T17:56:17+0800
-     * @param    [type]                   $value [description]
-     * @param    [type]                   $rule  [description]
-     * @return   [type]                          [description]
-     */
-    protected function rulename($value, $rule)
-    {
-
-    }
 }
