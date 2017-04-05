@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2017-04-01 18:04:51
+Date: 2017-04-05 18:04:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,11 +26,14 @@ CREATE TABLE `role` (
   `create_time` datetime NOT NULL,
   `modify_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='部门表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='部门表';
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
+INSERT INTO `role` VALUES ('1', '文章管理', '文章编辑者', '2017-04-05 13:48:24', '2017-04-05 13:48:27');
+INSERT INTO `role` VALUES ('2', '用户管理', '管理后台用户', '2017-04-05 14:04:38', '2017-04-05 16:57:40');
+INSERT INTO `role` VALUES ('3', '黄金无敌组', '这群人有很多黄金', '2017-04-05 16:39:50', '2017-04-05 17:26:14');
 
 -- ----------------------------
 -- Table structure for role_rule
@@ -45,6 +48,17 @@ CREATE TABLE `role_rule` (
 -- ----------------------------
 -- Records of role_rule
 -- ----------------------------
+INSERT INTO `role_rule` VALUES ('2', '1');
+INSERT INTO `role_rule` VALUES ('2', '3');
+INSERT INTO `role_rule` VALUES ('2', '4');
+INSERT INTO `role_rule` VALUES ('2', '8');
+INSERT INTO `role_rule` VALUES ('2', '9');
+INSERT INTO `role_rule` VALUES ('2', '10');
+INSERT INTO `role_rule` VALUES ('3', '1');
+INSERT INTO `role_rule` VALUES ('3', '3');
+INSERT INTO `role_rule` VALUES ('3', '8');
+INSERT INTO `role_rule` VALUES ('3', '9');
+INSERT INTO `role_rule` VALUES ('3', '10');
 
 -- ----------------------------
 -- Table structure for rule
@@ -59,7 +73,7 @@ CREATE TABLE `rule` (
   `isadmin` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否管理员才有的权限 0 不是 1 是',
   `icon` varchar(100) DEFAULT NULL COMMENT '图标',
   `sort` int(3) NOT NULL DEFAULT '255' COMMENT '排序',
-  `is_verify` tinyint(1) NOT NULL DEFAULT '1' COMMENT '需要验证: 0 不需要 1需要',
+  `isverify` tinyint(1) NOT NULL DEFAULT '1' COMMENT '需要验证: 0 不需要 1需要',
   `level` tinyint(2) DEFAULT NULL COMMENT '级别',
   `create_time` datetime NOT NULL,
   `modify_time` datetime NOT NULL,
@@ -70,10 +84,10 @@ CREATE TABLE `rule` (
 -- ----------------------------
 -- Records of rule
 -- ----------------------------
-INSERT INTO `rule` VALUES ('1', '0', 'user', '用户管理', '1', '1', null, '6', '1', '1', '2017-03-31 16:04:04', '2017-03-31 16:04:06');
+INSERT INTO `rule` VALUES ('1', '0', 'user', '用户管理', '1', '1', null, '6', '0', '1', '2017-03-31 16:04:04', '2017-03-31 16:04:06');
 INSERT INTO `rule` VALUES ('2', '1', 'rule/index', '菜单权限', '1', '1', '', '3', '1', '2', '2017-04-01 15:35:35', '2017-04-01 15:35:35');
 INSERT INTO `rule` VALUES ('3', '0', 'index/main', '首页面板', '1', '0', '', '1', '0', '1', '2017-04-01 15:48:18', '2017-04-01 17:41:22');
-INSERT INTO `rule` VALUES ('4', '1', 'urse/index', '用户列表', '1', '1', '', '1', '1', '2', '2017-04-01 15:59:42', '2017-04-01 15:59:42');
+INSERT INTO `rule` VALUES ('4', '1', 'urse/index', '用户列表', '1', '1', '', '1', '0', '2', '2017-04-01 15:59:42', '2017-04-01 15:59:42');
 INSERT INTO `rule` VALUES ('5', '1', 'role/index', '用户分组', '1', '1', '', '2', '1', '2', '2017-04-01 16:03:43', '2017-04-01 16:03:43');
 INSERT INTO `rule` VALUES ('6', '2', 'rule/add', '菜单添加', '0', '1', '', '1', '1', '3', '2017-04-01 16:31:52', '2017-04-01 17:04:11');
 INSERT INTO `rule` VALUES ('7', '2', 'rule/edit', '修改菜单', '0', '1', '', '2', '1', '3', '2017-04-01 16:42:20', '2017-04-01 17:06:00');
@@ -112,6 +126,7 @@ INSERT INTO `user` VALUES ('1', 'admin@admin.com', 'e10adc3949ba59abbe56e057f20f
 DROP TABLE IF EXISTS `user_rule`;
 CREATE TABLE `user_rule` (
   `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
   `rule_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`rule_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户权限菜单表';

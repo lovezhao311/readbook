@@ -10,7 +10,7 @@ class Rule extends Model
     protected $type = [
         'islink' => 'integer',
         'isadmin' => 'integer',
-        'is_verify' => 'integer',
+        'isverify' => 'integer',
     ];
 
     protected $updateTime = 'modify_time';
@@ -57,6 +57,17 @@ class Rule extends Model
     public function scopeSelect($query)
     {
         $query->field('level,title,parent_id,id')->where('islink', 1)->order('parent_id ASC,sort ASC');
+    }
+    /**
+     * 分配权限页面获取的字段
+     * @method   scopeRole
+     * @DateTime 2017-04-05T14:17:19+0800
+     * @param    string                   $value [description]
+     * @return   [type]                          [description]
+     */
+    public function scopeRole($query)
+    {
+        $query->field('isverify,isadmin,title,islink,parent_id,id')->order('parent_id ASC,sort ASC');
     }
 
     /**

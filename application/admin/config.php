@@ -18,4 +18,11 @@ return [
         'tpl_cache' => false,
         'taglib_pre_load' => "\\app\\admin\\taglib\\Form,\\app\\admin\\taglib\\Table",
     ],
+
+    //分页配置
+    'paginate' => [
+        'type' => \app\admin\library\Laypage::class,
+        'var_page' => 'page',
+        'list_rows' => 15,
+    ],
 ];

@@ -124,6 +124,7 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
                 if(typeof($data.data.pages) != 'undefined'){
                     if ($data.data.pages.pages > 1) {
                         var pageCont = el.parents('.layui-table').next('[lay-page]');
+
                         layui.laypage({
                             "cont": pageCont,
                             "curr": $data.data.pages.curr,

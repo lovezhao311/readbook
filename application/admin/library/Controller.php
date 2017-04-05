@@ -42,11 +42,13 @@ class Controller extends \think\Controller
     protected function save($query, $where = [], $scene = 'add')
     {
         if (!($query instanceof \think\Model)) {
-            throw new Exception("保存失败！");
+            throw new Exception("操作失败，请刷新页面重试！");
         }
         $data = array_merge($this->request->post('data/a', []), $where);
         // 验证数据
         $this->validate($where, $scene);
+        // 设置回调
+        $this->trigger($query, $data, $scene);
 
         if ($query->allowField(true)->save($data, $where) === false) {
             $error = $query->getError() ?: '操作失败，请刷新页面重试！';
@@ -54,5 +56,43 @@ class Controller extends \think\Controller
         }
 
         return $query;
+    }
+    /**
+     * 删除数据
+     * @method   delete
+     * @DateTime 2017-04-05T17:44:59+0800
+     * @return   [type]                   [description]
+     */
+    protected function delete($query, $where = [])
+    {
+        if (!($query instanceof \think\Model)) {
+            throw new Exception("操作失败，请刷新页面重试！");
+        }
+        $data = array_merge($this->request->post('data/a', []), $where);
+        // 设置回调
+        $this->trigger($query, $data, 'delete');
+
+        if ($query->where($data)->delete() === false) {
+            $error = $query->getError() ?: '操作失败，请刷新页面重试！';
+            throw new Exception($error);
+        }
+        return $query;
+    }
+    /**
+     * 操作监听
+     * @method   trigger
+     * @DateTime 2017-04-05T17:47:35+0800
+     * @param    [type]                   $query [description]
+     * @param    string                   $scene [description]
+     * @return   [type]                          [description]
+     */
+    protected function trigger($query, $data = [], $scene = 'add')
+    {
+        if (method_exists($query, 'trigger' . ucfirst($scene))) {
+            $result = call_user_func_array([$query, 'trigger' . ucfirst($scene)], [$data]);
+            if ($result === false) {
+                throw new Exception("操作失败，请刷新页面重试！");
+            }
+        }
     }
 }

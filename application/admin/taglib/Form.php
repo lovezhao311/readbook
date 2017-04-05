@@ -58,7 +58,15 @@ class Form extends TagLib
         }
         $eq = isset($tag['eq']) ? $tag['eq'] : '==';
 
-        $parseStr = '<?php echo (isset(' . $name . ') && (' . $name . $eq . $value . ')) ? "checked" : ""; ?>';
+        switch ($eq) {
+            case 'in':
+                $parseStr = '<?php echo (isset(' . $name . ') && in_array(' . $name . ',' . $value . ')) ? "checked" : ""; ?>';
+                break;
+            default:
+                $parseStr = '<?php echo (isset(' . $name . ') && (' . $name . $eq . $value . ')) ? "checked" : ""; ?>';
+                break;
+        }
+
         return $parseStr;
     }
     /**

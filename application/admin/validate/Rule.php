@@ -15,11 +15,11 @@ class Rule extends Validate
         'sort|菜单排序' => ['require', 'number'],
         'islink|是否菜单' => ['accepted'],
         'isadmin|是否管理员' => ['accepted'],
-        'is_verify|需要验证' => ['accepted'],
+        'isverify|需要验证' => ['accepted'],
     ];
 
     protected $scene = [
-        'add' => ['parent_id', 'title', 'name', 'icon', 'sort', 'islink', 'isadmin', 'is_verify'],
-        'edit' => ['parent_id', 'title', 'name', 'icon', 'sort', 'islink', 'isadmin', 'is_verify'],
+        'add' => ['parent_id', 'title', 'name', 'icon', 'sort', 'islink', 'isadmin', 'isverify'],
+        'edit' => ['parent_id', 'title', 'name', 'icon', 'sort', 'islink', 'isadmin', 'isverify'],
     ];
 }

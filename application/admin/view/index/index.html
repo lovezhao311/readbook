@@ -59,89 +59,29 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <ul class="layui-nav layui-nav-tree site-demo-nav">
+                    {volist name="list" id="vo"}
+                    {if condition="$key eq 0"}
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a class="javascript:;" href="main.html" data-rule-id="1">首页面板</a>
-                    </li>
+                    {else}
                     <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">书籍管理</a>
+                    {/if}
+                        {if condition="empty($vo['childrens'])"}
+                        <a class="javascript:;" href="{:url($vo['name'])}" data-rule-id="{$vo.id}">{$vo.title}</a>
+                        {else}
+                        <a class="javascript:;" href="javascript:;" data-rule-id="{$vo.id}">{$vo.title}</a>
                         <dl class="layui-nav-child">
+                        {volist name="vo['childrens']" id="children"}
                             <dd class="">
-                                <a href="book.html" data-rule-id="2">
-                                    <cite>书籍列表</cite>
+                                <a href="{:url($children['name'])}" data-rule-id="{$children.id}">
+                                    <cite>{$children.title}</cite>
                                 </a>
                             </dd>
-                            <dd class="">
-                                <a href="tags.html" data-rule-id="3">
-                                    <cite>书籍标签</cite>
-                                </a>
-                            </dd>
-                            <dd class="">
-                                <a href="author.html" data-rule-id="12">
-                                    <cite>书籍作者</cite>
-                                </a>
-                            </dd>
-                            <dd class="">
-                                <a href="source.html" data-rule-id="13">
-                                    <cite>书籍来源</cite>
-                                </a>
-                            </dd>
-                            <dd class="">
-                                <a href="gather.html" data-rule-id="10">
-                                    <cite>采集列表</cite>
-                                </a>
-                            </dd>
+                        {/volist}
                         </dl>
+                        {/if}
                     </li>
-                    <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">会员管理</a>
-                        <dl class="layui-nav-child">
-                            <dd class="">
-                                <a href="#" data-rule-id="4">
-                                    <cite>会员列表</cite>
-                                </a>
-                            </dd>
-                            <dd class="">
-                                <a href="#" data-rule-id="5">
-                                    <cite>会员分组</cite>
-                                </a>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">权限管理</a>
-                        <dl class="layui-nav-child">
-                            <dd class="">
-                                <a href="user.html" data-rule-id="6">
-                                    <cite>用户列表</cite>
-                                </a>
-                            </dd>
-                            <dd class="">
-                                <a href="role.html" data-rule-id="7">
-                                    <cite>用户分组</cite>
-                                </a>
-                            </dd>
-                            <dd class="">
-                                <a href="{:url('rule/index')}" data-rule-id="55">
-                                    <cite>菜单权限</cite>
-                                </a>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">个人中心</a>
-                        <dl class="layui-nav-child">
-                            <dd class="">
-                                <a href="personal.html" data-rule-id="8">
-                                    <cite>个人中心</cite>
-                                </a>
-                            </dd>
-                            <dd class="">
-                                <a href="#" data-rule-id="9">
-                                    <cite>退出</cite>
-                                </a>
-                            </dd>
-                        </dl>
-                    </li>
+                    {/volist}
+                    
                     <li class="layui-nav-item" style="height: 30px; text-align: center"></li>
                 </ul>
             </div>

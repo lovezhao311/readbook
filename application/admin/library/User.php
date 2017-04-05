@@ -50,12 +50,11 @@ class User
     {
         $rule = $this->_user->rule();
         if ($rule == null) {
-            $rules = Rule::scope('leftmenu')->select();
+            $rules = Rule::scope('leftmenu')->all();
         } else {
-            $rules = $rule->leftmenu()->select();
+            $rules = $rule->leftmenu()->all();
         }
-
-        return toTree($rules);
+        return toTree(collection($rules)->toArray());
     }
     /**
      * 用户登录
