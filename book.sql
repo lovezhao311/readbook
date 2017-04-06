@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2017-04-05 18:04:53
+Date: 2017-04-06 18:06:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,6 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', '文章管理', '文章编辑者', '2017-04-05 13:48:24', '2017-04-05 13:48:27');
 INSERT INTO `role` VALUES ('2', '用户管理', '管理后台用户', '2017-04-05 14:04:38', '2017-04-05 16:57:40');
 INSERT INTO `role` VALUES ('3', '黄金无敌组', '这群人有很多黄金', '2017-04-05 16:39:50', '2017-04-05 17:26:14');
 
@@ -79,7 +78,7 @@ CREATE TABLE `rule` (
   `modify_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `rulename` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='权限&菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='权限&菜单表';
 
 -- ----------------------------
 -- Records of rule
@@ -87,13 +86,16 @@ CREATE TABLE `rule` (
 INSERT INTO `rule` VALUES ('1', '0', 'user', '用户管理', '1', '1', null, '6', '0', '1', '2017-03-31 16:04:04', '2017-03-31 16:04:06');
 INSERT INTO `rule` VALUES ('2', '1', 'rule/index', '菜单权限', '1', '1', '', '3', '1', '2', '2017-04-01 15:35:35', '2017-04-01 15:35:35');
 INSERT INTO `rule` VALUES ('3', '0', 'index/main', '首页面板', '1', '0', '', '1', '0', '1', '2017-04-01 15:48:18', '2017-04-01 17:41:22');
-INSERT INTO `rule` VALUES ('4', '1', 'urse/index', '用户列表', '1', '1', '', '1', '0', '2', '2017-04-01 15:59:42', '2017-04-01 15:59:42');
+INSERT INTO `rule` VALUES ('4', '1', 'user/index', '用户列表', '1', '1', '', '1', '0', '2', '2017-04-01 15:59:42', '2017-04-01 15:59:42');
 INSERT INTO `rule` VALUES ('5', '1', 'role/index', '用户分组', '1', '1', '', '2', '1', '2', '2017-04-01 16:03:43', '2017-04-01 16:03:43');
 INSERT INTO `rule` VALUES ('6', '2', 'rule/add', '菜单添加', '0', '1', '', '1', '1', '3', '2017-04-01 16:31:52', '2017-04-01 17:04:11');
 INSERT INTO `rule` VALUES ('7', '2', 'rule/edit', '修改菜单', '0', '1', '', '2', '1', '3', '2017-04-01 16:42:20', '2017-04-01 17:06:00');
 INSERT INTO `rule` VALUES ('8', '0', 'personal', '个人中心', '1', '0', '', '7', '0', '1', '2017-04-01 17:07:00', '2017-04-01 17:41:39');
 INSERT INTO `rule` VALUES ('9', '8', 'personal/index', '个人中心', '1', '0', '', '1', '0', '2', '2017-04-01 17:35:30', '2017-04-01 17:41:47');
 INSERT INTO `rule` VALUES ('10', '8', 'index/logout', '退出', '1', '0', '', '2', '0', '2', '2017-04-01 17:36:31', '2017-04-01 17:41:54');
+INSERT INTO `rule` VALUES ('11', '5', 'role/add', '添加分组', '0', '1', '', '1', '0', '3', '2017-04-06 09:59:33', '2017-04-06 10:54:05');
+INSERT INTO `rule` VALUES ('12', '5', 'role/edit', '修改分组', '0', '1', '', '2', '0', '3', '2017-04-06 10:53:43', '2017-04-06 10:53:56');
+INSERT INTO `rule` VALUES ('13', '5', 'role/destroy', '删除分组', '0', '1', '', '3', '0', '3', '2017-04-06 10:54:41', '2017-04-06 10:54:41');
 
 -- ----------------------------
 -- Table structure for user
@@ -113,12 +115,14 @@ CREATE TABLE `user` (
   `create_time` datetime DEFAULT NULL,
   `modify_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', 'admin@admin.com', 'e10adc3949ba59abbe56e057f20f883e', '0', '0', '超管', '18526232020', '1', '127.0.0.1', '2017-03-30 15:50:49', '2017-03-22 10:35:17', '2017-03-23 17:19:51');
+INSERT INTO `user` VALUES ('2', 'canglaoshi@admin.com', 'e10adc3949ba59abbe56e057f20f883e', '2', '1', '仓井空仓井空仓井空', null, '0', null, null, '2017-04-06 12:03:12', '2017-04-06 16:24:55');
+INSERT INTO `user` VALUES ('3', 'xixi@admin.com', 'e10adc3949ba59abbe56e057f20f883e', '2', '0', '纱纱相', null, '1', null, null, '2017-04-06 17:20:17', '2017-04-06 17:30:52');
 
 -- ----------------------------
 -- Table structure for user_rule
