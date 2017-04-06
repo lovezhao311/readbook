@@ -1,0 +1,78 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>用户搜索</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" action="#" search>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="search[name]" autocomplete="off" placeholder="用户名" class="layui-input">
+            </div>
+            <div class="layui-input-inline layui-btn-group">
+                <button class="layui-btn layui-btn-primary" lay-submit="" data-elem=".layui-body-table" lay-filter="search"><i class="iconfont icon-originalimage"></i></button>
+                <a class="layui-btn layui-btn-primary" href="{:url('add')}"><i class="layui-icon">&#xe654;</i></a>
+            </div>
+        </div>
+    </form>
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>用户列表</legend>
+    </fieldset>
+
+    <table class="layui-table" lay-skin="line">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col width="200">
+            <col width="200">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>登录邮箱</th>
+                <th>用户组</th>
+                <th>状态</th>
+                <th>最后一次登录时间</th>
+                <th>最后一次登录IP</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="layui-body-table" data-url="{:url('index')}" data-elem=".layui-body-table">
+            
+        </tbody>
+        <script type="text/html" class="layui-body-table-script">
+            {{#  layui.each(d.data.data, function(index, item){ }}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.role_name }}</td>
+                    <td>
+                        {{# if(item.status == 0){ }}
+                        <a href="/admin/user/status/id/{{ item.id }}?status=1" data-msg="您确定要启用这条记录吗？" lay-delete>
+                        <i class="layui-icon">&#x1007;</i>
+                        </a>
+                        {{# }else{ }}
+                        <a href="/admin/user/status/id/{{ item.id }}?status=0" data-msg="您确定要禁用这条记录吗？" lay-delete>
+                        <i class="layui-icon">&#x1005;</i>
+                        </a>
+                        {{# } }}
+                    </td>
+                    <td>{{ item.last_time }}</td>
+                    <td>{{ item.last_ip }}</td>
+                    <td>
+                        <a href="/admin/user/edit/id/{{ item.id }}">
+                            <i class="layui-icon">&#xe642;</i>
+                        </a>
+                        <a href="/admin/user/allot/id/{{ item.id }}">
+                            <i class="layui-icon">&#xe631;</i>
+                        </a>
+                    </td>
+                </tr>
+            {{# }); }}
+        </script>
+    </table>
+    <div lay-page></div>

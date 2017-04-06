@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\model;
 
+use app\admin\library\User as UserLibrary;
 use think\Exception;
 use think\Model;
 
@@ -37,6 +38,42 @@ class Role extends Model
     public function userRule()
     {
         return $this->belongsToMany('Rule', 'user_rule');
+    }
+    /**
+     * 用户组列表
+     * @method   scopeList
+     * @DateTime 2017-04-06T11:46:49+0800
+     * @param    [type]                   $query [description]
+     * @return   [type]                          [description]
+     */
+    protected function scopeList($query)
+    {
+        $query->field('id,name,remark')->order('create_time DESC');
+    }
+    /**
+     * option选择
+     * @method   scopeOption
+     * @DateTime 2017-04-06T11:47:59+0800
+     * @param    [type]                   $query [description]
+     * @return   [type]                          [description]
+     */
+    protected function scopeOption($query)
+    {
+        $query->field('id,name')->order('create_time DESC');
+    }
+    /**
+     * 权限
+     * @method   scopeAuth
+     * @DateTime 2017-04-06T17:04:26+0800
+     * @param    [type]                   $query [description]
+     * @return   [type]                          [description]
+     */
+    protected function scopeAuth($query)
+    {
+        $user = UserLibrary::instance()->getUser();
+        if ($user['role'] != 0) {
+            $query->where('role.id', $user['role']);
+        }
     }
     /**
      * 添加用户组时注册的触发事件
@@ -89,7 +126,7 @@ class Role extends Model
      * @param    array                    $rules [description]
      * @return   [type]                          [description]
      */
-    protected function triggerDelete($rules = [])
+    public function triggerDelete($rules = [])
     {
         self::beforeDelete(function ($role) {
             if (empty($this->data) || !isset($this->data[$this->getPk()])) {

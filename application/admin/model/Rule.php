@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\model;
 
+use think\Db;
 use think\Model;
 
 class Rule extends Model
@@ -90,8 +91,8 @@ class Rule extends Model
      */
     protected function setLevelAttr($name, $data)
     {
-        if (isset($data['parent_id'])) {
-            return ((int) $this->parent()->value('level') + 1);
+        if (isset($data['parent_id']) && $data['parent_id'] > 0) {
+            return ((int) Db::name('rule')->where('id', $data['parent_id'])->value('level') + 1);
         }
         return 1;
     }

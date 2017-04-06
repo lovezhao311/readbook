@@ -9,7 +9,7 @@ return [
         // 登录标识
         'login' => 'User',
         // 登录验证
-        'login_auth' => true,
+        'login_auth' => false,
     ],
 
     // 模板

@@ -1,0 +1,56 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>用户添加</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" method="post" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[name]" lay-verify="username" value="{$user.name}" autocomplete="off" placeholder="姓名" class="layui-input">
+            </div>
+            <label class="layui-form-label"><span class="field-tip">*</span>邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[email]" lay-verify="email" value="{$user.email}" autocomplete="off" placeholder="邮箱" class="layui-input">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="data[password]" placeholder="密码" autocomplete="off" placeholder="密码" class="layui-input">
+            </div>
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="data[confirm]" autocomplete="off" placeholder="确认密码" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>用户组</label>
+            <div class="layui-input-inline">
+                <select name="data[role]">
+                    <option value="">请选择</option>
+                    {volist name="role" id="vo"}
+                    <option {form:selected name="$vo['id']" id="$user['role']"}  value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            {if condition="$login.role eq 0"}
+            <label class="layui-form-label"><span class="field-tip">*</span>管理员</label>
+            <div class="layui-input-inline" pane="">
+                <input type="checkbox" name="data[manager]" {form:checked name="$user.manager" id="1"} value="1" lay-skin="switch" lay-text="是|否">
+            </div>
+            {/if}
+            <label class="layui-form-label"><span class="field-tip">*</span>用户状态</label>
+            <div class="layui-input-inline" pane="">
+                <input type="checkbox" name="data[status]" {form:checked name="$user.status" id="1"} lay-skin="switch" value="1" lay-text="开启|关闭">
+            </div>
+        </div>
+        
+
+        <div class="layui-form-item">
+            <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
+        </div>
+    </form>

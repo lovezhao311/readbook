@@ -2,13 +2,14 @@
 namespace app\admin\controller;
 
 use app\admin\library\Controller;
-use app\admin\model\Role as RoleModel;
-use app\admin\model\Rule as RuleModel;
+use app\admin\model\Role;
+use app\admin\model\User as UserModel;
+use think\Exception;
 
-class Role extends Controller
+class User extends Controller
 {
     /**
-     * 用户组
+     * 用户
      * @method   index
      * @DateTime 2017-03-31T13:36:08+0800
      * @return   [type]                   [description]
@@ -16,7 +17,7 @@ class Role extends Controller
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list = $this->_getSearch(new RoleModel)->scope('list')->paginate();
+            $list = $this->_getSearch(new UserModel)->scope('list,auth')->paginate();
             $this->result($list->toArray(), 1);
         }
         return $this->fetch();
@@ -31,14 +32,14 @@ class Role extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $this->save(new RoleModel);
+                $this->save(new UserModel);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('添加成功', 'role/index');
+            $this->success('添加成功', 'user/index');
         }
-        $list = RuleModel::scope('role')->all();
-        $this->assign('ruleList', toTree(collection($list)->toArray()));
+        $role = Role::scope('option,auth')->all();
+        $this->assign('role', $role);
         return $this->fetch();
     }
     /**
@@ -50,43 +51,51 @@ class Role extends Controller
      */
     public function edit($id)
     {
-        $role = RoleModel::get($id);
-        if (empty($role)) {
-            $this->error('用户组不存在！');
+        $user = UserModel::scope('auth')->get($id);
+        if (empty($user)) {
+            $this->error('用户不存在！');
         }
         if ($this->request->isAjax()) {
             try {
-                $this->save($role, ['id' => $id], 'edit');
+                $this->save(new UserModel, ['id' => $id], 'edit');
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改成功', 'role/index');
+            $this->success('修改成功', 'user/index');
         }
-        $list = RuleModel::scope('role')->all();
-        $this->assign('ruleList', toTree(collection($list)->toArray()));
+        $role = Role::scope('option,auth')->all();
         $this->assign('role', $role);
-        $this->assign('rules', $role->rule()->column('id'));
+        $this->assign('user', $user);
         return $this->fetch();
     }
     /**
-     * 销毁用户组
+     * 禁用&启用用户
      * @method   destroy
      * @DateTime 2017-04-05T14:09:43+0800
      * @param    [type]                   $id [description]
      * @return   [type]                       [description]
      */
-    public function destroy($id)
+    public function status($id)
     {
-        $role = RoleModel::get($id);
-        if (empty($role)) {
-            $this->error('用户组不存在！');
+        if ($this->request->isAjax()) {
+            try {
+                $this->save(new UserModel, ['id' => $id], 'status', 'get', '', ['status']);
+            } catch (Exception $e) {
+                $this->error($e->getMessage());
+            }
+            $this->success('修改成功', 'user/index');
         }
-        try {
-            $this->delete($role);
-        } catch (Exception $e) {
-            $this->error($e->getMessage());
-        }
-        $this->success('删除成功', 'role/index');
+    }
+    /**
+     * 分配权限
+     * @method   allot
+     * @DateTime 2017-04-06T17:41:13+0800
+     * @param    [type]                   $id [description]
+     * @return   [type]                       [description]
+     */
+    public function allot($id)
+    {
+        # code...
     }
 
 }

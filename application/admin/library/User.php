@@ -52,7 +52,14 @@ class User
         if ($rule == null) {
             $rules = Rule::scope('leftmenu')->all();
         } else {
-            $rules = $rule->leftmenu()->all();
+            $rule->field('name,title,icon,parent_id,id')
+                ->where('level', '<=', 2)
+                ->where('islink', 1)
+                ->order('parent_id ASC,sort ASC');
+            if ($this->_user->manager == 0) {
+                $rule->where('isadmin', 0);
+            }
+            $rules = $rule->select();
         }
         return toTree(collection($rules)->toArray());
     }
@@ -74,7 +81,9 @@ class User
         if (empty($user)) {
             throw new Exception("登录失败,用户不存在！");
         }
-
+        if ($user['status'] == 0) {
+            throw new Exception("登录失败,用户不存在！");
+        }
         $password = $user->setPasswordAttr($login['password']);
 
         if ($password != $user['password']) {

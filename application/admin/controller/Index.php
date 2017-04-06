@@ -33,6 +33,17 @@ class Index extends Controller
         return $this->fetch();
     }
     /**
+     * 退出
+     * @method   logout
+     * @DateTime 2017-04-06T16:30:27+0800
+     * @return   [type]                   [description]
+     */
+    public function logout()
+    {
+        session(null);
+        $this->success('退出成功！');
+    }
+    /**
      * 系统框架
      * @method   index
      * @DateTime 2017-03-31T13:36:08+0800

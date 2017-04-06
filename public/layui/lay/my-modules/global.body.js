@@ -216,11 +216,15 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
      */
     $(document).on('click', '[lay-delete]', function(event) {
         event.preventDefault();
-        var href = $(this).attr('href');
+        var href = $(this).attr('href'),
+            msg = $(this).data('msg');
+            if(typeof(msg) == 'undefined'){
+                msg = '您确定要删除这条记录吗？';
+            }
         /* Act on the event */
-        layer.confirm("您确定要删除这条记录吗？", {
+        layer.confirm(msg, {
             icon: 3,
-            title: '删除提醒'
+            title: '提醒'
         }, function(index) {
             $.ajax({
                 "url": href,

@@ -37,7 +37,7 @@ class Verify
             return;
         }
         // 权限 验证
-        if ($this->validateRule() === null) {
+        if ($this->validateRule() === false) {
             $this->error('您还没有权限操作！');
         }
 
@@ -100,10 +100,15 @@ class Verify
         if (config('session.login_auth') && session($cacheKey)) {
             return session($cacheKey);
         }
+
+        $ruleModel = $user->rule()->where('name', $this->getUri());
+        if ($user->manager == 0) {
+            $ruleModel->where('isadmin', 0);
+        }
         // 再看数据库
-        $rule = $user->rule()->where('name', $this->getUri())->find();
+        $rule = $ruleModel->find();
         if (empty($rule)) {
-            config('session.login_auth') && session($cacheKey, false);
+            config('session.login_auth') && session($cacheKey, null);
             return false;
         }
         config('session.login_auth') && session($cacheKey, true);

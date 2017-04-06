@@ -1,7 +1,7 @@
     <fieldset class="layui-elem-field layui-field-title">
         <legend>用户组搜索</legend>
     </fieldset>
-    <form class="layui-form layui-form-pane" action="#" search>
+    <form class="layui-form layui-form-pane" action="{:url('role/index')}" search>
         <div class="layui-form-item">
             <label class="layui-form-label">用户组</label>
             <div class="layui-input-inline">
@@ -39,10 +39,10 @@
                     <td>{{ item.id }}</td>
                     <td>{{ item.name }}</td>
                     <td>
-                        <a class="layui-btn layui-btn-primary layui-btn-small" href="/admin/role/edit/id/{{ item.id }}">
+                        <a href="/admin/role/edit/id/{{ item.id }}">
                             <i class="layui-icon">&#xe642;</i>
                         </a>
-                        <a class="layui-btn layui-btn-primary layui-btn-small" href="/admin/role/destroy/id/{{ item.id }}" layui-delete>
+                        <a href="/admin/role/destroy/id/{{ item.id }}" lay-delete>
                             <i class="layui-icon">&#xe640;</i>
                         </a>
                     </td>
