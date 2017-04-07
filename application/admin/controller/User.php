@@ -95,7 +95,30 @@ class User extends Controller
      */
     public function allot($id)
     {
-        # code...
+        $user = UserModel::scope('auth')->get($id);
+        if (empty($user)) {
+            $this->error('用户不存在！');
+        }
+
+        if ($this->request->isAjax()) {
+            $data = $this->request->post('data/a');
+            try {
+                $this->validate($data, 'allot');
+                $user->rule()->detach();
+                // 添加现在的数据
+                $rules = array_keys(array_filter($data['rule']));
+                if (!empty($rules)) {
+                    $user->rule()->attach($rules, ['role_id' => $user['role']]);
+                }
+            } catch (Exception $e) {
+                $this->error($e->getMessage());
+            }
+            $this->success('修改成功', 'user/index');
+        }
+
+        $this->assign('ruleList', toTree(collection($user->roles->rule()->where('isadmin', 0)->select())->toArray()));
+        $this->assign('user', $user);
+        return $this->fetch();
     }
 
 }

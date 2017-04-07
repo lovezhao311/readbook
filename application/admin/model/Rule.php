@@ -49,6 +49,17 @@ class Rule extends Model
         $query->field('name,title,icon,parent_id,id')->where('level', '<=', 2)->where('islink', 1)->order('parent_id ASC,sort ASC');
     }
     /**
+     * 获取所有的权限菜单
+     * @method   scopeRule
+     * @DateTime 2017-04-07T12:22:47+0800
+     * @param    [type]                   $query [description]
+     * @return   [type]                          [description]
+     */
+    public function scopeRule($query)
+    {
+        $query->field('name,title,icon,parent_id,id,isadmin,isverify')->order('parent_id ASC,sort ASC');
+    }
+    /**
      * select 选择框数据
      * @method   scopeOption
      * @DateTime 2017-03-31T16:44:23+0800

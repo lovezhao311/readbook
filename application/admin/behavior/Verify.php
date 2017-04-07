@@ -20,6 +20,7 @@ class Verify
      */
     protected $_noVerify = [
         'index/index',
+        'index/logout',
     ];
 
     public function actionBegin(&$params)

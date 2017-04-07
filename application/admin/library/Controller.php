@@ -9,10 +9,17 @@ use think\Loader;
 
 class Controller extends \think\Controller
 {
+    /**
+     * 当前登录用户模型
+     * @var null
+     */
+    protected $userLibrary = null;
     protected function _initialize()
     {
+        $this->userLibrary = UserLibrary::instance();
+
         if (!$this->request->isAjax()) {
-            $this->assign('login', UserLibrary::instance()->getUser());
+            $this->assign('login', $this->userLibrary->getUser());
         }
     }
     /**

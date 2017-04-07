@@ -1,0 +1,59 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>用户权限分配</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" method="post" action="{:url('user/allot',['id'=>$user['id']])}">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>用户名称</label>
+            <div class="layui-input-inline" pane>
+                {$user.name}
+            </div>
+            <label class="layui-form-label"><span class="field-tip">*</span>用户邮箱</label>
+            <div class="layui-input-inline" pane>
+                {$user.email}
+            </div>
+        </div>
+        {volist name="ruleList" id="vo"}
+        <fieldset class="layui-elem-field">
+            <legend>
+                <input type="checkbox" {form:checked name="$vo['isverify']" id="0"} value="1" name="data[rule][{$vo.id}]" readonly="readonly" lay-skin="primary" title="{$vo.title}">
+                <a href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-small rule-all" title="">全选</a>
+                <a href="javascript:void(0)" class="layui-btn layui-btn-primary layui-btn-small rule-cancel" title="">取消</a>
+            </legend>
+            <div class="layui-field-box">
+                {volist name="vo['childrens']" id="v"}
+                    <input type="checkbox" name="data[rule][{$v.id}]" {form:checked name="$v['isverify']" id="0"} value="1" readonly="readonly" lay-skin="primary" title="{$v.title}">
+                    {volist name="v['childrens']" id="item"}
+                    <input type="checkbox" name="data[rule][{$item.id}]" {form:checked name="$item['isverify']" id="0"} value="1" readonly="readonly" lay-skin="primary" title="{$item.title}">
+                    {/volist}
+                    <hr>
+                {/volist}
+            </div>
+        </fieldset>
+        {/volist}
+
+        <div class="layui-form-item">
+            <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        layui.define(['jquery','form'], function(exports){
+            var $ = layui.jquery
+                ,form = layui.form();
+
+            $(document).on('click', '.rule-all', function(event) {
+                event.preventDefault();
+                /* Act on the event */
+                var $this = $(this);
+                $this.parent().parent().find('input[type="checkbox"]').prop('checked',true);
+                form.render('checkbox');
+            });
+            $(document).on('click', '.rule-cancel', function(event) {
+                event.preventDefault();
+                /* Act on the event */
+                var $this = $(this);
+                $this.parent().parent().find('input[type="checkbox"]').prop('checked',false);
+                form.render('checkbox');
+            });
+        });
+    </script>

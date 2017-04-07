@@ -15,11 +15,13 @@ class User extends Validate
         'role|用户组' => ['require', 'exist:role'],
         'manager|管理员' => ['in:0,1'],
         'status|用户状态' => ['in:0,1'],
+        'rule|用户权限' => ['require', 'array'],
     ];
 
     protected $scene = [
         'add' => ['name', 'email', 'password', 'confirm', 'role', 'manager', 'status'],
         'edit' => ['name', 'email', 'role', 'manager', 'status'],
+        'allot' => ['rule'],
         'checkpass' => ['password', 'confirm'],
         'status' => ['status'],
     ];

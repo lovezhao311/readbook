@@ -111,8 +111,6 @@ class User extends Model
         $user = UserLibrary::instance()->getUser();
         if ($user['role'] != 0) {
             $query->where('user.role', $user['role'])->where('user.manager', 0);
-        } else {
-            throw new Exception("你没有权限操作这个页面！");
         }
     }
     /**

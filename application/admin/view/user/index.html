@@ -67,9 +67,11 @@
                         <a href="/admin/user/edit/id/{{ item.id }}">
                             <i class="layui-icon">&#xe642;</i>
                         </a>
+                        {{# if(item.manager == 0){ }}
                         <a href="/admin/user/allot/id/{{ item.id }}">
                             <i class="layui-icon">&#xe631;</i>
                         </a>
+                        {{# } }}
                     </td>
                 </tr>
             {{# }); }}

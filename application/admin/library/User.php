@@ -64,6 +64,24 @@ class User
         return toTree(collection($rules)->toArray());
     }
     /**
+     * 获取当前用户组权限
+     * @method   getRule
+     * @DateTime 2017-04-07T12:22:11+0800
+     * @return   [type]                   [description]
+     */
+    public function getRule()
+    {
+        $rule = $this->_user->rule();
+        if ($rule == null) {
+            $rules = Rule::scope('rule')->all();
+        } else {
+            $rules = $rule->field('name,title,icon,parent_id,id,isverify,isadmin')
+                ->order('parent_id ASC,sort ASC')
+                ->select();
+        }
+        return $rules;
+    }
+    /**
      * 用户登录
      * @method   login
      * @DateTime 2017-03-31T11:47:50+0800
