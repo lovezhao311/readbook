@@ -25,9 +25,17 @@
                 <div class="layui-form component">
                     <select lay-search lay-filter="component">
                         <option value="">搜索菜单</option>
-                        <option value="#1489724249329" data-rule-id="1">首页</option>
-                        <option value="#2017" data-rule-id="2">书籍列表</option>
-                        <option value="#3" data-rule-id="3">书籍标签</option>
+                        {volist name="list" id="vo"}
+                        {if condition="empty($vo['childrens'])"}
+                        <option value="{:url($vo['name'])}" data-rule-id="{$vo.id}">{$vo.title}</option>
+                        {else}
+                        <optgroup label="{$vo.title}">
+                            {volist name="vo['childrens']" id="v"}
+                            <option value="{:url($v['name'])}" data-rule-id="{$v.id}">{$v.title}</option>
+                            {/volist}
+                        </optgroup>
+                        {/if}
+                        {/volist}
                     </select>
                 </div>
                 <ul class="layui-nav" pc>

@@ -27,9 +27,28 @@ class Index extends Controller
                 $this->error($e->getMessage());
             }
 
-            $this->success('登录成功', 'index/index');
+            $this->success('用户登录', 'index/index');
         }
         $this->view->engine->layout(true);
+        return $this->fetch();
+    }
+    /**
+     * 修改个人资料
+     * @method   personal
+     * @DateTime 2017-04-08T10:05:28+0800
+     * @return   [type]                   [description]
+     */
+    public function personal()
+    {
+        if ($this->request->isAjax()) {
+            try {
+                $this->save($this->userLibrary->getUser(), [], 'personal');
+            } catch (Exception $e) {
+                $this->error($e->getMessage());
+            }
+            session(null);
+            $this->success('个人资料修改', 'index/login');
+        }
         return $this->fetch();
     }
     /**
@@ -41,7 +60,7 @@ class Index extends Controller
     public function logout()
     {
         session(null);
-        $this->success('退出成功！');
+        $this->success('退出登录');
     }
     /**
      * 系统框架
@@ -53,7 +72,7 @@ class Index extends Controller
     {
         $this->view->engine->layout(true);
         $leftmenu = User::instance()->getMenu();
-        $this->assign('list', $leftmenu);
+        $this->assign('list', toTree($leftmenu));
         return $this->fetch();
     }
     /**

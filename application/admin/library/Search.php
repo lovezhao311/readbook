@@ -30,6 +30,11 @@ class Search
      */
     public function check(Model $query)
     {
+
+        $params = $this->params();
+        if (empty($params)) {
+            return $query;
+        }
         if (empty($this->rules)) {
             return $query;
         }
@@ -40,10 +45,6 @@ class Search
         }
 
         $rules = $this->rules[$action];
-        $params = $this->params();
-        if (empty($params)) {
-            return $query;
-        }
 
         foreach ($rules as $key => $value) {
             if (isset($params[$key])) {

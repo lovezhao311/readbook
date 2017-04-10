@@ -31,11 +31,11 @@ class Rule extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $this->save(new RuleModel);
+                $rule = $this->save(new RuleModel);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('添加成功', 'rule/index');
+            $this->success('权限菜单添加[id:' . $rule->id . ']', 'rule/index');
         }
         $list = RuleModel::scope('select')->all();
         $this->assign('list', treeSort($list));
@@ -60,7 +60,7 @@ class Rule extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改成功', 'rule/index');
+            $this->success('修改权限菜单[id:' . $id . ']', 'rule/index');
         }
         $list = RuleModel::scope('select')->all();
         $this->assign('rule', $rule);

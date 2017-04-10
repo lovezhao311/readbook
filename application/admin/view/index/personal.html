@@ -1,0 +1,29 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>修改密码</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" method="post" action="{:url('index/personal')}">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>姓名</label>
+            <div class="layui-input-inline" pane="">
+                {$login.name}
+            </div>
+            <label class="layui-form-label"><span class="field-tip">*</span>邮箱</label>
+            <div class="layui-input-inline" pane="">
+                {$login.email}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>密码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[password]" placeholder="密码" lay-verify="pass" autocomplete="off" placeholder="密码" class="layui-input">
+            </div>
+            <label class="layui-form-label"><span class="field-tip">*</span>确认密码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[confirm]" autocomplete="off" placeholder="确认密码" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
+        </div>
+    </form>

@@ -23,7 +23,7 @@ class User extends Controller
         return $this->fetch();
     }
     /**
-     * 添加用户组
+     * 添加用户
      * @method   add
      * @DateTime 2017-03-31T16:39:49+0800
      * @param    string                   $value [description]
@@ -32,11 +32,11 @@ class User extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $this->save(new UserModel);
+                $user = $this->save(new UserModel);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('添加成功', 'user/index');
+            $this->success('添加用户[id:' . $user->id . ']', 'user/index');
         }
         $role = Role::scope('option,auth')->all();
         $this->assign('role', $role);
@@ -61,7 +61,7 @@ class User extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改成功', 'user/index');
+            $this->success('修改用户[id:' . $id . ']', 'user/index');
         }
         $role = Role::scope('option,auth')->all();
         $this->assign('role', $role);
@@ -83,7 +83,7 @@ class User extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改成功', 'user/index');
+            $this->success('修改用户[id:' . $id . ']', 'user/index');
         }
     }
     /**
@@ -113,7 +113,7 @@ class User extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改成功', 'user/index');
+            $this->success('用户分配权限[id:' . $id . ']', 'user/index');
         }
 
         $this->assign('ruleList', toTree(collection($user->roles->rule()->where('isadmin', 0)->select())->toArray()));

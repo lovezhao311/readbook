@@ -26,4 +26,7 @@ return [
         'list_rows' => 15,
     ],
 
+    'handle_log' => [
+        'type' => 'mysql',
+    ],
 ];

@@ -5,6 +5,7 @@ use app\admin\library\User as UserLibrary;
 use think\Exception;
 use think\exception\ClassNotFoundException;
 use think\exception\ValidateException;
+use think\Hook;
 use think\Loader;
 
 class Controller extends \think\Controller
@@ -134,5 +135,21 @@ class Controller extends \think\Controller
                 throw new Exception("操作失败，请刷新页面重试！");
             }
         }
+    }
+
+    /**
+     * 操作成功跳转的快捷方法
+     * @access protected
+     * @param mixed     $msg 提示信息
+     * @param string    $url 跳转的URL地址
+     * @param mixed     $data 返回的数据
+     * @param integer   $wait 跳转等待时间
+     * @param array     $header 发送的Header信息
+     * @return void
+     */
+    protected function success($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
+    {
+        Hook::listen('handle_success', $msg);
+        parent::success($msg . '成功', $url, $data, $wait, $header);
     }
 }

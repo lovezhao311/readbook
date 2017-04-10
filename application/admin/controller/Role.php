@@ -31,11 +31,11 @@ class Role extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $this->save(new RoleModel);
+                $role = $this->save(new RoleModel);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('添加成功', 'role/index');
+            $this->success('添加用户组[id:' . $role->id . ']', 'role/index');
         }
         $list = RuleModel::scope('role')->all();
         $this->assign('ruleList', toTree(collection($list)->toArray()));
@@ -60,7 +60,7 @@ class Role extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改成功', 'role/index');
+            $this->success('用户组修改[id:' . $id . ']', 'role/index');
         }
         $list = RuleModel::scope('role')->all();
         $this->assign('ruleList', toTree(collection($list)->toArray()));
@@ -86,7 +86,7 @@ class Role extends Controller
         } catch (Exception $e) {
             $this->error($e->getMessage());
         }
-        $this->success('删除成功', 'role/index');
+        $this->success('删除用户组[id:' . $id . ']', 'role/index');
     }
 
 }

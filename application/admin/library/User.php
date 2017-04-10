@@ -61,7 +61,7 @@ class User
             }
             $rules = $rule->select();
         }
-        return toTree(collection($rules)->toArray());
+        return collection($rules)->toArray();
     }
     /**
      * 获取当前用户组权限
@@ -107,6 +107,9 @@ class User
         if ($password != $user['password']) {
             throw new Exception("登录失败,密码不正确！");
         }
+        $user->last_ip = request()->ip();
+        $user->last_time = date('Y-m-d H:i:s');
+        $user->save();
         session(config('session.login'), serialize($user));
     }
     /**
