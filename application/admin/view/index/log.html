@@ -1,0 +1,30 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>日志列表</legend>
+    </fieldset>
+
+    <table class="layui-table" lay-skin="line">
+        <colgroup>
+            <col width="50">
+            <col width="200">
+            <col width="200">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>操作说明</th>
+                <th>操作时间</th>
+            </tr>
+        </thead>
+        <tbody class="layui-body-table" data-url="{:url('index/log')}" data-elem=".layui-body-table">
+        </tbody>
+        <script type="text/html" class="layui-body-table-script">
+            {{#  layui.each(d.data.data, function(index, item){ }}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td title='{{ item.params }}' alt="{{ item.params }}">{{ item.msg }}</td>
+                    <td>{{ item.create_time }}</td>
+                </tr>
+            {{# }); }}
+        </script>
+    </table>
+    <div lay-page></div>

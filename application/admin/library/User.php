@@ -110,7 +110,9 @@ class User
         $user->last_ip = request()->ip();
         $user->last_time = date('Y-m-d H:i:s');
         $user->save();
+        // 设置session
         session(config('session.login'), serialize($user));
+        $this->_user = $user;
     }
     /**
      * 私有构造函数，防止外界实例化对象

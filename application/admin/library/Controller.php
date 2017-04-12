@@ -45,11 +45,11 @@ class Controller extends \think\Controller
     /**
      * 获取搜索参数
      * 去除empty
-     * @method   _getSearch
+     * @method   search
      * @DateTime 2017-03-02T15:28:09+0800
      * @return   [type]                   [description]
      */
-    protected function _getSearch($query)
+    protected function search($query)
     {
         // 通过控制器去找对应search过滤规则
         $search = $this->request->controller();

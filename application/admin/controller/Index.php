@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use app\admin\library\Controller;
 use app\admin\library\User;
+use app\admin\model\HandleLog;
 use think\Exception;
 
 class Index extends Controller
@@ -73,6 +74,20 @@ class Index extends Controller
         $this->view->engine->layout(true);
         $leftmenu = User::instance()->getMenu();
         $this->assign('list', toTree($leftmenu));
+        return $this->fetch();
+    }
+    /**
+     * [log description]
+     * @method   log
+     * @DateTime 2017-04-12T17:33:19+0800
+     * @return   [type]                   [description]
+     */
+    public function log()
+    {
+        if ($this->request->isAjax()) {
+            $list = HandleLog::scope('list')->paginate();
+            $this->result($list->toArray(), 1);
+        }
         return $this->fetch();
     }
     /**

@@ -17,7 +17,7 @@ class User extends Controller
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list = $this->_getSearch(new UserModel)->scope('list,auth')->paginate();
+            $list = $this->search(new UserModel)->scope('list,auth')->paginate();
             $this->result($list->toArray(), 1);
         }
         return $this->fetch();

@@ -16,7 +16,7 @@ class Role extends Controller
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list = $this->_getSearch(new RoleModel)->scope('list')->paginate();
+            $list = $this->search(new RoleModel)->scope('list')->paginate();
             $this->result($list->toArray(), 1);
         }
         return $this->fetch();
