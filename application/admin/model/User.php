@@ -42,7 +42,7 @@ class User extends Model
         }
     }
     /**
-     * 编辑时的监听
+     * 修改列时的一些验证操作
      * @method   triggerEdit
      * @DateTime 2017-04-06T12:21:17+0800
      * @param    [type]                   $user [description]
@@ -50,42 +50,16 @@ class User extends Model
      */
     public function triggerEdit($data)
     {
-        $this->triggerManager($data);
-
-        self::beforeUpdate(function ($user) use ($data) {
-            if (Validate::is($data['password'], 'require')) {
-                $validate = validate('User');
-                if (!$validate->check($data, [], 'checkpass')) {
-                    throw new Exception($validate->getError());
-                }
-            } else {
-                $user->readonly('password');
+        if (Validate::is($data['password'], 'require')) {
+            $validate = validate('User');
+            if (!$validate->check($data, [], 'checkpass')) {
+                throw new Exception($validate->getError());
             }
-        });
+        } else {
+            $this->readonly('password');
+        }
     }
-    /**
-     * 添加时监听
-     * @method   triggerAdd
-     * @DateTime 2017-04-06T17:28:21+0800
-     * @param    [type]                   $data [description]
-     * @return   [type]                         [description]
-     */
-    public function triggerAdd($data)
-    {
-        $this->triggerManager($data);
-    }
-    /**
-     * 部门管理员身份时添加&更新
-     * @method   triggerManager
-     * @DateTime 2017-04-06T17:28:51+0800
-     * @return   [type]                   [description]
-     */
-    public function triggerManager($data)
-    {
-        self::beforeWrite(function ($user) use ($data) {
-            $user->manager = 0;
-        });
-    }
+
     /**
      * 列表页面
      * @method   scopeList

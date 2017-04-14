@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use app\admin\library\Controller;
 use app\admin\model\Role as RoleModel;
 use app\admin\model\Rule as RuleModel;
+use think\Db;
 
 class Role extends Controller
 {
@@ -30,11 +31,24 @@ class Role extends Controller
     public function add()
     {
         if ($this->request->isAjax()) {
+
+            Db::startTrans();
             try {
-                $role = $this->save(new RoleModel);
+                $role = new RoleModel;
+                $this->save($role);
+                $data = $this->request->post('data/a');
+                // 添加现在的数据
+                $rules = array_keys(array_filter($data['rule']));
+                if (!empty($rules)) {
+                    $role->rule()->attach($rules);
+                }
+
+                Db::commit();
             } catch (Exception $e) {
+                Db::rollback();
                 $this->error($e->getMessage());
             }
+
             $this->success('添加用户组[id:' . $role->id . ']', 'role/index');
         }
         $list = RuleModel::scope('role')->all();
@@ -55,13 +69,40 @@ class Role extends Controller
             $this->error('用户组不存在！');
         }
         if ($this->request->isAjax()) {
+
+            Db::startTrans();
             try {
-                $this->save($role, ['id' => $id], 'edit');
+                // 更新关联表
+                $data = $this->request->post('data/a');
+                // 原有数据
+                $oldrules = $role->rule()->column('id');
+                // 提交的数据
+                $rules = array_keys(array_filter($data['rule']));
+                // 要删除的数据
+                $del = array_values(array_diff($oldrules, $rules));
+                if (!empty($del)) {
+                    // 用户权限关联表
+                    $role->userRule()->detach($del);
+                    // 部门权限关联表
+                    $role->rule()->detach($del);
+                }
+                // 要添加的数据
+                $add = array_values(array_diff($rules, $oldrules));
+                if (!empty($add)) {
+                    $role->rule()->attach($add);
+                }
+                // 更新主表
+                $this->save($role, [], 'edit');
+                // 提交
+                Db::commit();
             } catch (Exception $e) {
+                // 回滚
+                Db::rollback();
                 $this->error($e->getMessage());
             }
             $this->success('用户组修改[id:' . $id . ']', 'role/index');
         }
+
         $list = RuleModel::scope('role')->all();
         $this->assign('ruleList', toTree(collection($list)->toArray()));
         $this->assign('role', $role);
@@ -81,9 +122,17 @@ class Role extends Controller
         if (empty($role)) {
             $this->error('用户组不存在！');
         }
+        Db::startTrans();
         try {
+            // 用户权限关联表
+            $role->userRule()->detach();
+            // 部门权限关联表
+            $role->rule()->detach();
+
             $this->delete($role);
+            Db::commit();
         } catch (Exception $e) {
+            Db::rollback();
             $this->error($e->getMessage());
         }
         $this->success('删除用户组[id:' . $id . ']', 'role/index');

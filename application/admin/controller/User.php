@@ -4,7 +4,9 @@ namespace app\admin\controller;
 use app\admin\library\Controller;
 use app\admin\model\Role;
 use app\admin\model\User as UserModel;
+use think\Db;
 use think\Exception;
+use think\Validate;
 
 class User extends Controller
 {
@@ -32,7 +34,10 @@ class User extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $user = $this->save(new UserModel);
+
+                $user = new UserModel;
+                $this->save($user);
+
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
@@ -57,7 +62,7 @@ class User extends Controller
         }
         if ($this->request->isAjax()) {
             try {
-                $this->save(new UserModel, ['id' => $id], 'edit');
+                $this->save($user, [], 'edit');
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
@@ -102,7 +107,10 @@ class User extends Controller
 
         if ($this->request->isAjax()) {
             $data = $this->request->post('data/a');
+
+            Db::startTrans();
             try {
+
                 $this->validate($data, 'allot');
                 $user->rule()->detach();
                 // 添加现在的数据
@@ -110,7 +118,10 @@ class User extends Controller
                 if (!empty($rules)) {
                     $user->rule()->attach($rules, ['role_id' => $user['role']]);
                 }
+
+                Db::commit();
             } catch (Exception $e) {
+                Db::rollback();
                 $this->error($e->getMessage());
             }
             $this->success('用户分配权限[id:' . $id . ']', 'user/index');
