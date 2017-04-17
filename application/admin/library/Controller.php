@@ -154,4 +154,14 @@ class Controller extends \think\Controller
         Hook::listen('handle_success', $msg);
         parent::success($msg . '成功', $url, $data, $wait, $header);
     }
+    /**
+     * [_empty description]
+     * @method   _empty
+     * @DateTime 2017-04-17T17:51:35+0800
+     * @return   [type]                   [description]
+     */
+    public function _empty()
+    {
+        return '找不到控制器的方法！';
+    }
 }
