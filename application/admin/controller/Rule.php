@@ -31,7 +31,8 @@ class Rule extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $rule = $this->save(new RuleModel);
+                $rule = new RuleModel;
+                $this->save($rule);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }

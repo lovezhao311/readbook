@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LuffyCMS安装</title>
+    {load href="/bootstrap/css/bootstrap.css,/bootstrap/css/bootstrap-luffyzhao.css,/bootstrap/css/bs-is-fun.css" /}
+    <style type="text/css">
+    .navbar-luffy,.navbar-brand {
+        background-color: #337ab7;
+    }
+    .message-info{
+        height: 500px;
+        overflow: hidden;
+        background-color: #eaedf1;
+    }
+    </style>
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script type="text/javascript" src="/bootstrap/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="navbar navbar-luffy navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                LuffyCMS安装
+            </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ul class="nav nav-pills nav-justified step step-round">
+            <li class="active"><a>系统检查</a>
+            </li>
+            <li class="active"><a>系统配置</a>
+            </li>
+            <li class="active"><a>安装CMS</a>
+            </li>
+        </ul>
+        <div class="panel panel-primary">
+            <div class="panel-heading">安装CMS</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-body message-info">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var show = function($msg,$type){
+            $('.message-info').prepend('<p class="text-'+$type+'">'+$msg+'</p>')
+        }
+    </script>
+    <iframe src="{:url('index/setting',['go'=>1])}" style="display: none;" height="0" width="0" ></iframe>
+</body>
+</html>

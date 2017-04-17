@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LuffyCMS安装</title>
+    {load href="/bootstrap/css/bootstrap.css,/bootstrap/css/bootstrap-luffyzhao.css,/bootstrap/css/bs-is-fun.css" /}
+    <style type="text/css">
+    .navbar-luffy,.navbar-brand {
+        background-color: #337ab7;
+    }
+    </style>
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script type="text/javascript" src="/bootstrap/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="navbar navbar-luffy navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                LuffyCMS安装
+            </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ul class="nav nav-pills nav-justified step step-round">
+            <li class="active"><a>系统检查</a>
+            </li>
+            <li class="active"><a>系统配置</a>
+            </li>
+            <li><a>安装CMS</a>
+            </li>
+        </ul>
+        <div class="panel panel-primary">
+            <div class="panel-heading">系统配置</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        {if condition="isset($errorInfo) && $errorInfo"}
+                        <div class="alert alert-danger" role="alert">{volist name="$errorInfo" id="vo"}<strong>{$vo}</strong>  {/volist}</div>
+                        {/if}
+                        <form action="{:url('index/config')}" class="form-horizontal" method="post" name="rule">
+                            <div class="form-group">
+                                <label for="inputhostname" class="col-sm-3 control-label">服务器地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="hostname" id="inputhostname" value="127.0.0.1" placeholder="服务器地址">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputusername" class="col-sm-3 control-label">数据库用户名</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="username" id="inputusername" value="root" placeholder="数据库用户名">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputpassword" class="col-sm-3 control-label">数据库密码</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="password" id="inputpassword" value="123456" placeholder="数据库密码">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputhostport" class="col-sm-3 control-label">数据库连接端口</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="hostport" id="inputhostport" value="3306" placeholder="数据库连接端口">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputdatabase" class="col-sm-3 control-label">数据库名</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="database" id="inputdatabase" value="luffycms" placeholder="数据库名">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-9">
+                                    <button type="submit" class="btn btn-primary">下一步</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

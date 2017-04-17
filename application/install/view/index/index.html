@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LuffyCMS安装</title>
+    {load href="/bootstrap/css/bootstrap.css,/bootstrap/css/bootstrap-luffyzhao.css,/bootstrap/css/bs-is-fun.css" /}
+    <style type="text/css">
+    .navbar-luffy,.navbar-brand {
+        background-color: #337ab7;
+    }
+    .badge-success{
+        background-color: #5cb85c;
+    }
+    .badge-warning{
+        background-color: #f0ad4e;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="navbar navbar-luffy navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                LuffyCMS安装
+            </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ul class="nav nav-pills nav-justified step step-round">
+            <li class="active"><a>系统检查</a>
+            </li>
+            <li><a>系统配置</a>
+            </li>
+            <li><a>安装CMS</a>
+            </li>
+        </ul>
+        <div class="panel panel-primary">
+            <div class="panel-heading">系统项检查</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                PHP版本
+                                {if condition="$checks['phpversion']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                PDO扩展
+                                {if condition="$checks['pdo']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                MBstring扩展
+                                {if condition="$checks['mbstring']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                CURL扩展
+                                {if condition="$checks['curl']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                GD扩展
+                                {if condition="$checks['gd']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                应用运行目录是否可写
+                                {if condition="$checks['runtime_is_w']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                应用日志目录是否可写
+                                {if condition="$checks['log_is_w']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                项目模板缓存目录是否可写
+                                {if condition="$checks['cache_is_w']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                            <li class="list-group-item">
+                                应用缓存目录是否可写
+                                {if condition="$checks['temp_is_w']"}
+                                <span class="badge badge-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                {else}
+                                <span class="badge badge-warning"><i class="glyphicon glyphicon-remove"></i></span>
+                                {/if}
+                            </li>
+                        </ul>
+
+                        {if condition="!in_array(false, $checks)"}
+                        <a class="btn btn-primary btn-block" href="{:url('index/config')}">下一步</a>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
