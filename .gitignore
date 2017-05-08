@@ -2,3 +2,4 @@
 /thinkphp/
 /.idea/
 /runtime/
+composer.lock

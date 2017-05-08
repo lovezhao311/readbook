@@ -16,24 +16,21 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.0.0",
         "topthink/framework": "^5.0",
+        "luffyzhao/helper" : "^1.0",
         "topthink/think-captcha": "^1.0"
     },
     "extra": {
         "think-path": "thinkphp"
     },
     "config": {
-        "preferred-install": "dist",
-        "secure-http": false  
+        "preferred-install": "dist"
     },
-    "repositories": [
-        {
-            "type": "composer", 
-            "url": "http://pkg.phpcomposer.com/repo/packagist/"
-        },
-        {
-            "packagist": false
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
         }
-    ]
+    }
 }
