@@ -52,11 +52,11 @@
                     <td>{{ item.role_name }}</td>
                     <td>
                         {{# if(item.status == 0){ }}
-                        <a href="/admin/user/status/id/{{ item.id }}?status=1" data-msg="您确定要启用这条记录吗？" lay-delete>
+                        <a href="/admin/user/status/id/{{ item.id }}?data[status]=1" data-msg="您确定要启用这条记录吗？" lay-delete>
                         <i class="layui-icon">&#x1007;</i>
                         </a>
                         {{# }else{ }}
-                        <a href="/admin/user/status/id/{{ item.id }}?status=0" data-msg="您确定要禁用这条记录吗？" lay-delete>
+                        <a href="/admin/user/status/id/{{ item.id }}?data[status]=0" data-msg="您确定要禁用这条记录吗？" lay-delete>
                         <i class="layui-icon">&#x1005;</i>
                         </a>
                         {{# } }}

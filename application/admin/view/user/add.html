@@ -40,15 +40,16 @@
             {if condition="$login.role eq 0"}
             <label class="layui-form-label"><span class="field-tip">*</span>管理员</label>
             <div class="layui-input-inline" pane="">
-                <input type="checkbox" name="data[manager]" value="1" lay-skin="switch" lay-text="是|否">
+                <input type="radio" name="data[manager]" value="1" title="是" checked="">
+                <input type="radio" name="data[manager]" value="0" title="否">
             </div>
             {/if}
             <label class="layui-form-label"><span class="field-tip">*</span>用户状态</label>
             <div class="layui-input-inline" pane="">
-                <input type="checkbox" name="data[status]" lay-skin="switch" value="1" lay-text="开启|关闭">
+                <input type="radio" name="data[status]" value="1" title="开启" checked="">
+                <input type="radio" name="data[status]" value="0" title="关闭">
             </div>
         </div>
-        
 
         <div class="layui-form-item">
             <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>

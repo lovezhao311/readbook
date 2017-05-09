@@ -1,4 +1,4 @@
-layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', 'verify','upload'], function(exports) {
+layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', 'verify', 'upload'], function(exports) {
     var $ = layui.jquery,
         layer = layui.layer,
         form = layui.form(),
@@ -12,38 +12,26 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
         layer.alert('Layui最低支持ie8，您当前使用的是古老的 IE' + device.ie + '，你丫的肯定不是程序猿！');
     }
 
-    layui.serializeArrayToPath = function($arr) {
-        var newArr = new Array();
-        for (var i=0; i<$arr.length; i++) {
-            var $obj = $arr[i];
-            if(typeof($obj.name) == 'undefined'){
-                continue;
-            }
-            var $str = $obj.name + '=' + layui.formValue($obj);
-            newArr.push($str);
-        }
-        return newArr.join('&');
-    };
-
-    layui.formValue = function(input){
-        switch($(input).attr('type')){
-            case 'checkbox':
-                if($(input).is(':checked')){
+    layui.formValue = function(input) {
+            switch ($(input).attr('type')) {
+                case 'checkbox':
+                case 'radio':
+                    if ($(input).is(':checked')) {
+                        return $(input).val();
+                    }
+                    break;
+                default:
                     return $(input).val();
-                }
-                break;
-            default:
-                return $(input).val();
+            }
+            return false;
         }
-        return '';
-    }
-    /**
-     * 菜单
-     * @method   rule
-     * @DateTime 2017-03-24T15:37:34+0800
-     * @param    {[type]}                 t [description]
-     * @return   {[type]}                   [description]
-     */
+        /**
+         * 菜单
+         * @method   rule
+         * @DateTime 2017-03-24T15:37:34+0800
+         * @param    {[type]}                 t [description]
+         * @return   {[type]}                   [description]
+         */
     layui.rule = function(opt) {
             if (opt.href == 'javascript:;') {
                 return false;
@@ -72,16 +60,16 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
                 // 失败不跳转
                 layer.msg($data.msg, { icon: 5 });
 
-                window.setTimeout(function(){
-                    window.location.href = $data.url;
-                },$data.wait*1000);
+                // window.setTimeout(function(){
+                // window.location.href = $data.url;
+                // },$data.wait*1000);
             } else if ($data.code == 1) {
                 // 成功跳转
                 layer.msg($data.msg, { icon: 1 });
-                window.setTimeout(function(){
+                window.setTimeout(function() {
                     window.location.href = $data.url;
-                },$data.wait*1000);
-                
+                }, $data.wait * 1000);
+
             }
         }
         /**
@@ -104,9 +92,10 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
                 "dataType": 'json',
                 "data": params
             }).done(function($data) {
-                if(typeof($data.data.data) == 'undefined'){
+                layer.closeAll('loading');
+                if (typeof($data.data.data) == 'undefined') {
                     var _data = $data.data;
-                }else{
+                } else {
                     var _data = $data.data.data;
                 }
 
@@ -120,8 +109,7 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
                     el.html('<tr><td colspan="' + el.prev().find('th').length + '">没有数据了哟！</td></tr>');
                 }
                 //
-                layer.closeAll('loading');
-                if(typeof($data.data.pages) != 'undefined'){
+                if (typeof($data.data.pages) != 'undefined') {
                     if ($data.data.pages.pages > 1) {
                         var pageCont = el.parents('.layui-table').next('[lay-page]');
 
@@ -184,8 +172,7 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
     form.on('submit(save)', function(data) {
         var action = typeof(data.form.action) == 'undefined' ? document.URL : data.form.action,
             method = typeof(data.form.method) == 'undefined' ? 'post' : data.form.method;
-            params = layui.serializeArrayToPath(data.form);
-
+        params = $(data.form).serialize();
         $.ajax({
             "url": action,
             "type": method,
@@ -218,9 +205,9 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
         event.preventDefault();
         var href = $(this).attr('href'),
             msg = $(this).data('msg');
-            if(typeof(msg) == 'undefined'){
-                msg = '您确定要删除这条记录吗？';
-            }
+        if (typeof(msg) == 'undefined') {
+            msg = '您确定要删除这条记录吗？';
+        }
         /* Act on the event */
         layer.confirm(msg, {
             icon: 3,
@@ -242,10 +229,16 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
      */
     $(document).on('click', '[data-iframe]', function(event) {
         event.preventDefault();
+        if($(this).hasClass('layui-btn-disabled')){
+            return false;
+        }
         var url = $(this).data('url'),
             params = $(this).data('params');
         if (typeof(params) == 'object') {
             params = encodeURI(JSON.stringify(params));
+        }
+        if(typeof(params) == 'undefined'){
+            params = '';
         }
         /* Act on the event */
         layer.open({
@@ -263,30 +256,31 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
      * @return   {[type]}                        [description]
      */
     layui.upload({
-        url: '/index/upload' //上传接口,
-        ,method: 'post',
+        url: '/admin/index/upload' //上传接口,
+            ,
+        method: 'post',
         ext: 'jpg|png|gif',
         elem: '.layui-upload-file-image',
         before: function(input) {
             layer.load(0, { shade: false });
         },
         success: function(res, input) { //上传成功后的回调
-            layer.close('loading');
-            if (res.code == 0) {
+            layer.closeAll('loading');
+            if (res.code != 0) {
                 layer.msg('文件上传失败！！', { time: 5000, icon: 5 });
                 return false;
             }
-            var $img = $(input).parents('.site-demo-upload').children('img');
-            if($img.length > 0){
+            var $img = $(input).parents('.layui-input-block').children('img');
+            if ($img.length > 0) {
                 $img.attr('src', res.data.src);
-            }else{
-                $(input).parents('.site-demo-upload').prepend('<img src="'+res.data.src+'" />');
+            } else {
+                $(input).parents('.layui-input-block').prepend('<img src="' + res.data.src + '" />');
             }
-            $(input).parents('.site-demo-upload').children('input[type="hidden"]').val(res.data.src);
+            $(input).parents('.site-demo-upbar').children('input[type="hidden"]').val(res.data.src);
         },
-        error:function(){
+        error: function() {
             layer.msg('文件上传失败！');
-            layer.close('loading');
+            layer.closeAll('loading');
         }
     });
     /**
@@ -296,7 +290,7 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
      * @param    {[type]}                 event){                     event.preventDefault();    } [description]
      * @return   {[type]}                          [description]
      */
-    $(document).on('click','span.tag a', function(event){
+    $(document).on('click', 'span.tag a', function(event) {
         event.preventDefault();
         $(this).parent().remove();
     });

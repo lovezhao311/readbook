@@ -37,15 +37,18 @@
         <div class="layui-form-item">
             <label class="layui-form-label"><span class="field-tip">*</span>是否菜单</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="data[islink]" value="1" lay-skin="switch" lay-text="ON|OFF">
+                <input type="radio" name="data[islink]" value="1" title="是" checked="">
+                <input type="radio" name="data[islink]" value="0" title="否">
             </div>
             <label class="layui-form-label"><span class="field-tip">*</span>是否管理员</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="data[isadmin]" value="1" lay-skin="switch" lay-text="ON|OFF">
+                <input type="radio" name="data[isadmin]" value="1" title="是" checked="">
+                <input type="radio" name="data[isadmin]" value="0" title="否">
             </div>
             <label class="layui-form-label">需要验证</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="data[isverify]" value="1" lay-skin="switch" lay-text="ON|OFF">
+                <input type="radio" name="data[isverify]" value="1" title="要" checked="">
+                <input type="radio" name="data[isverify]" value="0" title="不要">
             </div>
         </div>
         <div class="layui-form-item">

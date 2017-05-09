@@ -3,11 +3,11 @@ namespace app\admin\search;
 
 use luffyzhao\helper\Search;
 
-class User extends Search
+class Author extends Search
 {
     protected $rules = [
         'index' => [
-            'name' => ['whereLike', 'user.name'],
+            'name' => ['whereLike', 'name'],
         ],
     ];
 }

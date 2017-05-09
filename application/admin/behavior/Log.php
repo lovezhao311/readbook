@@ -1,8 +1,8 @@
 <?php
 namespace app\admin\behavior;
 
-use app\admin\library\HandleLog;
 use app\admin\library\User;
+use luffyzhao\helper\HandleLog;
 
 class Log
 {

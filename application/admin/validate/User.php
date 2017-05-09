@@ -1,14 +1,12 @@
 <?php
 namespace app\admin\validate;
 
-use think\Validate;
+use luffyzhao\helper\Validate;
 
 class User extends Validate
 {
-    use \app\admin\library\traits\Validate;
-
     protected $rule = [
-        'name|用户名称' => ['require', 'chs', 'length:2,10'],
+        'name|用户名称' => ['require', 'chsDash', 'length:2,10'],
         'email|邮箱' => ['require', 'email', 'unique:user'],
         'password|密码' => ['require', 'length:6,12'],
         'confirm|确认密码' => ['require', 'confirm:password'],

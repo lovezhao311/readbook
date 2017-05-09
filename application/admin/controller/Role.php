@@ -5,6 +5,7 @@ use app\admin\library\Controller;
 use app\admin\model\Role as RoleModel;
 use app\admin\model\Rule as RuleModel;
 use think\Db;
+use think\Exception;
 
 class Role extends Controller
 {
@@ -17,7 +18,8 @@ class Role extends Controller
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list = $this->search(new RoleModel)->scope('list')->paginate();
+            $model = RoleModel::scope('list');
+            $list = $this->search($model)->paginate();
             $this->result($list->toArray(), 1);
         }
         return $this->fetch();
@@ -51,7 +53,7 @@ class Role extends Controller
 
             $this->success('添加用户组[id:' . $role->id . ']', 'role/index');
         }
-        $list = RuleModel::scope('role')->all();
+        $list = RuleModel::scope('role')->select();
         $this->assign('ruleList', toTree(collection($list)->toArray()));
         return $this->fetch();
     }
@@ -103,7 +105,7 @@ class Role extends Controller
             $this->success('用户组修改[id:' . $id . ']', 'role/index');
         }
 
-        $list = RuleModel::scope('role')->all();
+        $list = RuleModel::scope('role')->select();
         $this->assign('ruleList', toTree(collection($list)->toArray()));
         $this->assign('role', $role);
         $this->assign('rules', $role->rule()->column('id'));

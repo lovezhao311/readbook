@@ -1,12 +1,10 @@
 <?php
 namespace app\admin\validate;
 
-use think\Validate;
+use luffyzhao\helper\Validate;
 
 class Index extends Validate
 {
-    use \app\admin\library\traits\Validate;
-
     protected $rule = [
         'email|登录邮箱' => ['require', 'email'],
         'password|登录密码' => ['require', 'password'],

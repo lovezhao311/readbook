@@ -50,7 +50,7 @@ class User
     {
         $rule = $this->_user->rule();
         if ($rule == null) {
-            $rules = Rule::scope('leftmenu')->all();
+            $rules = Rule::scope('leftmenu')->select();
         } else {
             $rule->field('name,title,icon,parent_id,id')
                 ->where('level', '<=', 2)
@@ -73,7 +73,7 @@ class User
     {
         $rule = $this->_user->rule();
         if ($rule == null) {
-            $rules = Rule::scope('rule')->all();
+            $rules = Rule::scope('rule')->select();
         } else {
             $rules = $rule->field('name,title,icon,parent_id,id,isverify,isadmin')
                 ->order('parent_id ASC,sort ASC')

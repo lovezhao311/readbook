@@ -20,7 +20,7 @@ class Index extends Controller
 
             try {
                 // 验证请求的数据
-                $this->validate([], 'login');
+                $this->validate($this->request->post('data/a'), 'login');
                 // 执行登录
                 User::instance()->login();
 

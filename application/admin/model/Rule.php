@@ -6,7 +6,7 @@ use think\Model;
 
 class Rule extends Model
 {
-    protected $insert = ['level'];
+    protected $auto = ['level'];
 
     protected $type = [
         'islink' => 'integer',

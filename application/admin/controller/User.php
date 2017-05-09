@@ -19,7 +19,8 @@ class User extends Controller
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list = $this->search(new UserModel)->scope('list,auth')->paginate();
+            $model = UserModel::scope('list,auth');
+            $list = $this->search($model)->paginate();
             $this->result($list->toArray(), 1);
         }
         return $this->fetch();
@@ -43,7 +44,7 @@ class User extends Controller
             }
             $this->success('添加用户[id:' . $user->id . ']', 'user/index');
         }
-        $role = Role::scope('option,auth')->all();
+        $role = Role::scope('option,auth')->select();
         $this->assign('role', $role);
         return $this->fetch();
     }
@@ -56,7 +57,7 @@ class User extends Controller
      */
     public function edit($id)
     {
-        $user = UserModel::scope('auth')->get($id);
+        $user = UserModel::scope('auth')->find($id);
         if (empty($user)) {
             $this->error('用户不存在！');
         }
@@ -68,7 +69,7 @@ class User extends Controller
             }
             $this->success('修改用户[id:' . $id . ']', 'user/index');
         }
-        $role = Role::scope('option,auth')->all();
+        $role = Role::scope('option,auth')->select();
         $this->assign('role', $role);
         $this->assign('user', $user);
         return $this->fetch();
@@ -84,7 +85,8 @@ class User extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $this->save(new UserModel, ['id' => $id], 'status', 'get', '', ['status']);
+                $user = new UserModel;
+                $this->save($user, ['id' => $id], 'status', [], 'get', 'data/a', ['status']);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
@@ -100,7 +102,7 @@ class User extends Controller
      */
     public function allot($id)
     {
-        $user = UserModel::scope('auth')->get($id);
+        $user = UserModel::scope('auth')->find($id);
         if (empty($user)) {
             $this->error('用户不存在！');
         }

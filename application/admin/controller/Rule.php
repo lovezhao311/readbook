@@ -16,7 +16,7 @@ class Rule extends Controller
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list = RuleModel::scope('list')->all();
+            $list = RuleModel::scope('list')->select();
             $this->result(treeSort($list), 1);
         }
         return $this->fetch();
@@ -38,7 +38,7 @@ class Rule extends Controller
             }
             $this->success('权限菜单添加[id:' . $rule->id . ']', 'rule/index');
         }
-        $list = RuleModel::scope('select')->all();
+        $list = RuleModel::scope('select')->select();
         $this->assign('list', treeSort($list));
         return $this->fetch();
     }
@@ -63,7 +63,7 @@ class Rule extends Controller
             }
             $this->success('修改权限菜单[id:' . $id . ']', 'rule/index');
         }
-        $list = RuleModel::scope('select')->all();
+        $list = RuleModel::scope('select')->select();
         $this->assign('rule', $rule);
         $this->assign('list', treeSort($list));
         return $this->fetch();
