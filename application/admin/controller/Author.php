@@ -37,7 +37,7 @@ class Author extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('添加作者[id:' . $author->id . ']', 'index');
+            $this->success('添加书籍作者[id:' . $author->id . ']', 'index');
         }
         return $this->fetch();
     }
@@ -52,7 +52,7 @@ class Author extends Controller
     {
         $author = AuthorModel::get($id);
         if (empty($author)) {
-            $this->error('作者不存在！');
+            $this->error('书籍作者不存在！');
         }
         if ($this->request->isAjax()) {
             try {
@@ -60,7 +60,7 @@ class Author extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改作者[id:' . $author->id . ']', 'index');
+            $this->success('修改书籍作者[id:' . $author->id . ']', 'index');
         }
         $this->assign('author', $author);
         return $this->fetch();
@@ -80,7 +80,7 @@ class Author extends Controller
         } catch (Exception $e) {
             $this->error($e->getMessage());
         }
-        $this->success('删除作者[id:' . $id . ']');
+        $this->success('删除书籍作者[id:' . $id . ']');
     }
 
 }

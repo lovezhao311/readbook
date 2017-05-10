@@ -100,4 +100,29 @@ class Index extends Controller
     {
 
     }
+
+    /**
+     * 上传
+     * @method   upload
+     * @DateTime 2017-04-27T15:59:20+0800
+     * @param    string                   $value [description]
+     * @return   [type]                          [description]
+     */
+    public function upload()
+    {
+        if ($this->request->isPost()) {
+            config('default_return_type', 'json');
+
+            $file = request()->file('file');
+            $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+            if ($info) {
+                $this->success(0, null,
+                    [
+                        'src' => '/uploads/' . $info->getSaveName(),
+                    ]);
+            } else {
+                $this->result([], 0, $file->getError());
+            }
+        }
+    }
 }

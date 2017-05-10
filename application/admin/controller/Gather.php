@@ -41,7 +41,7 @@ class Gather extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('添加采集源[id:' . $gather->id . ']', 'index');
+            $this->success('添加书籍采集源[id:' . $gather->id . ']', 'index');
         }
         return $this->fetch();
     }
@@ -56,7 +56,7 @@ class Gather extends Controller
     {
         $gather = GatherModel::get($id);
         if (empty($gather)) {
-            $this->error('采集源不存在！');
+            $this->error('书籍采集源不存在！');
         }
         if ($this->request->isAjax()) {
             try {
@@ -68,7 +68,7 @@ class Gather extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改采集源[id:' . $gather->id . ']', 'index');
+            $this->success('修改书籍采集源[id:' . $gather->id . ']', 'index');
         }
         $this->assign('gather', $gather);
         return $this->fetch();
@@ -89,7 +89,7 @@ class Gather extends Controller
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('删除采集源[id:' . $id . ']');
+            $this->success('删除书籍采集源[id:' . $id . ']');
         }
     }
 

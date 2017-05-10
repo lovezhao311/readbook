@@ -1,0 +1,50 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>书籍标签搜索</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" action="{:url('iframe')}?params={$params}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="search[name]" autocomplete="off" placeholder="标签名称" class="layui-input">
+            </div>
+            <div class="layui-input-inline layui-btn-group">
+                <button class="layui-btn layui-btn-primary" lay-submit="" data-elem=".layui-body-table" lay-filter="search"><i class="iconfont icon-originalimage"></i></button>
+            </div>
+        </div>
+    </form>
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>书籍标签列表</legend>
+    </fieldset>
+
+    <table class="layui-table" lay-skin="line">
+        <colgroup>
+            <col width="150">
+            <col>
+            <col width="200">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>标签名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="layui-body-table" data-url="{:url('iframe')}?params={$params}" data-elem=".layui-body-table">
+            
+        </tbody>
+        <script type="text/html" class="layui-body-table-script">
+            {{#  layui.each(d.data.data, function(index, item){ }}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>
+                        <button class="layui-btn layui-btn-primary layui-btn-small" href="#" layui-iframe-choose="" data-item='{{ JSON.stringify(item) }}' data-callback="tagsChoose" multiple>
+                            <i class="layui-icon">&#xe654;</i>
+                            添加
+                        </button>
+                    </td>
+                </tr>
+            {{# }); }}
+        </script>
+    </table>
+    <div lay-page></div>

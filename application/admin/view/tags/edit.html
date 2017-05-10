@@ -1,0 +1,28 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>书籍标签添加</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" method="post" action="{:url('edit',['id'=>$tags['id']])}">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>标签名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[name]" autocomplete="off" value="{$tags.name}" placeholder="标签名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>英文名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[en_name]" lay-verify="tags" value="{$tags.en_name}" autocomplete="off" placeholder="英文名称" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">用于url地址</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">标签说明</label>
+            <div class="layui-input-block">
+                <textarea placeholder="标签说明" name="data[remark]" class="layui-textarea">{$tags.remark}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
+        </div>
+    </form>

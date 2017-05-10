@@ -20,7 +20,9 @@ class Verify
      */
     protected $_noVerify = [
         'index/index',
+        'tags/iframe',
         'index/logout',
+        'index/upload',
     ];
 
     public function actionBegin(&$params)

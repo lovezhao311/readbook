@@ -6,7 +6,7 @@ use luffyzhao\helper\Validate;
 class Gather extends Validate
 {
     protected $rule = [
-        'name|采集名称' => ['require', 'chsDash', 'length:2,10'],
+        'name|采集名称' => ['require', 'chsDash', 'length:2,10', 'unique'],
         'remark|采集说明' => ['max:255'],
         'url|采集网址' => ['require', 'max:255', 'url'],
         'search|搜索页面正则' => ['require', 'max:255'],

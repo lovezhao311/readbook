@@ -236,8 +236,9 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
             params = $(this).data('params');
         if (typeof(params) == 'object') {
             params = encodeURI(JSON.stringify(params));
-        }
-        if(typeof(params) == 'undefined'){
+        }else if(typeof(params) == 'string'){
+            params = encodeURI(eval(params+"();"));
+        }else{
             params = '';
         }
         /* Act on the event */
@@ -270,11 +271,11 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
                 layer.msg('文件上传失败！！', { time: 5000, icon: 5 });
                 return false;
             }
-            var $img = $(input).parents('.layui-input-block').children('img');
+            var $img = $(input).parents('.layui-input-block .site-demo-upload').children('img');
             if ($img.length > 0) {
                 $img.attr('src', res.data.src);
             } else {
-                $(input).parents('.layui-input-block').prepend('<img src="' + res.data.src + '" />');
+                $(input).parents('.layui-input-block .site-demo-upload').prepend('<img src="' + res.data.src + '" />');
             }
             $(input).parents('.site-demo-upbar').children('input[type="hidden"]').val(res.data.src);
         },

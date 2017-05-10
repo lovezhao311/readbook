@@ -1,0 +1,171 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>书籍添加</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" method="post" action="{:url('add')}">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>书籍名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[name]" autocomplete="off" placeholder="书籍名称" class="layui-input">
+            </div>
+            <label class="layui-form-label"><span class="field-tip">*</span>别名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[alias]" autocomplete="off" placeholder="别名" class="layui-input">
+            </div>
+            <label class="layui-form-label"><span class="field-tip">*</span>书籍作者</label>
+            <div class="layui-input-inline">
+                <select name="data[author_id]">
+                    <option value="">请选择</option>
+                    {volist name="$authors" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>书籍标签</label>
+            <div class="layui-input-block tags-input" pane="">
+                
+            </div>
+            <a class="layui-btn layui-btn-primary" data-iframe data-url="{:url('tags/iframe')}" data-params='getTags'>
+                <i class="layui-icon">&#xe654;</i> 添加
+            </a>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">书籍ISBN</label>
+            <div class="layui-input-inline">
+                <input type="text" name="data[isbn]" autocomplete="off" placeholder="书籍ISBN" class="layui-input">
+            </div>
+            <label class="layui-form-label">书籍来源</label>
+            <div class="layui-input-inline">
+                <select name="data[source_id]">
+                    <option value="">请选择</option>
+                    {volist name="$sources" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <label class="layui-form-label">完结状态</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="data[end_status]" value="1" title="连载" checked="">
+                <input type="radio" name="data[end_status]" value="2" title="完结">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text layui-form-text-inline">
+            <div class="form-item-group">
+                <label class="layui-form-label"><span class="field-tip">*</span>封面图片</label>
+                <div class="layui-input-block" image>
+                    <div class="site-demo-upload">
+                     <img src="http://temp.im/200x200" alt="" style="height:200px;width:200px;">
+                      <div class="site-demo-upbar">
+                        <input type="hidden" name="data[image]">
+                        <input type="file" name="file" class="layui-upload-file layui-upload-file-image" id="test">
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-item-group form-item-group-image-desc">
+                <label class="layui-form-label">书籍说明</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="书籍说明" name="data[remark]" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">采集地址</label>
+            <div class="layui-input-inline layui-input-inline-group">
+                <select name="data[gather][gather_id][]" class="layui-input">
+                    <option value="">请选译</option>
+                    {volist name="gathers" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline layui-input-inline-big layui-input-inline-group">
+                <input type="text" name="data[gather][list_url][]" autocomplete="off" placeholder="列表页面地址" class="layui-input">
+            </div>
+            <div class="layui-input-inline layui-input-inline-mini layui-input-inline-group">
+                <input type="text" name="data[gather][sort][]" autocomplete="off" placeholder="排序" class="layui-input">
+            </div>
+            <a class="layui-btn layui-btn-primary" data-gather data-parts="true"><i class="layui-icon">&#xe654;</i>添加</a>
+        </div>
+
+        <div class="layui-form-item">
+            <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
+        </div>
+    </form>
+    <script id="gather-input" type="text/html">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-label-group"></label>
+            <div class="layui-input-inline layui-input-inline-group">
+                <select name="data[gather][gather_id][]" class="layui-input">
+                    <option value="">请选译</option>
+                    {volist name="gathers" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-input-inline layui-input-inline-big layui-input-inline-group">
+                <input type="text" name="data[gather][list_url][]" autocomplete="off" placeholder="列表页面地址" class="layui-input">
+            </div>
+            <div class="layui-input-inline layui-input-inline-mini layui-input-inline-group">
+                <input type="text" name="data[gather][sort][]" autocomplete="off" placeholder="排序" class="layui-input">
+            </div>
+            <a class="layui-btn layui-btn-primary" data-gather data-parts="false"><i class="layui-icon">&#xe640;</i>删除</a>
+        </div>
+    </script>
+    <script id="tags-input" type="text/html"> 
+        <span class="tag">
+            {{ d.name }}
+            <input type="hidden" name="data[tags][]" value="{{ d.id }}">
+            <a href="#" title="Removing tag">x</a>
+        </span>
+    </script>
+    <script type="text/javascript">
+    layui.define(['layer', 'jquery', 'laytpl', 'form'], function(exports) {
+        var $ = layui.jquery,
+            laytpl = layui.laytpl,
+            form = layui.form(),
+            layer = layui.layer;
+
+        /**
+         * 采集地址
+         * @method
+         * @DateTime 2017-03-04T16:32:41+0800
+         * @param    {[type]}                 ){                 } [description]
+         * @return   {[type]}                     [description]
+         */
+        $(document).on('click', '[data-gather]', function() {
+            var $this = $(this),
+                $op = $(this).data('parts');
+            // 等于真新增
+            // 等于假删除
+            if ($op) {
+                laytpl($('#gather-input').html()).render({}, function(html) {
+                    $this.parent().after(html);
+                    form.render('select')
+                });
+            } else {
+                $this.parent().remove();
+            }
+        });
+
+
+    });
+
+
+
+
+    var tagsChoose = function(itme) {
+        layui.laytpl($('#tags-input').html()).render(itme, function(html) {
+            $('.tags-input').append(html);
+        });
+    }
+
+    var getTags = function(){
+        var tags = [];
+        $('[name="data[tags][]"]').each(function(index, el) {
+            tags.push($(el).val());
+        });
+        return tags.join(',');
+    }
+    </script>

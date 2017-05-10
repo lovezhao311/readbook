@@ -2,13 +2,13 @@
 namespace app\admin\controller;
 
 use app\admin\library\Controller;
-use app\admin\model\Source as SourceModel;
+use app\admin\model\Tags as TagsModel;
 use think\Exception;
 
-class Source extends Controller
+class Tags extends Controller
 {
     /**
-     * 来源
+     * 书籍标签
      * @method   index
      * @DateTime 2017-03-31T13:36:08+0800
      * @return   [type]                   [description]
@@ -16,14 +16,14 @@ class Source extends Controller
     public function index()
     {
         if ($this->request->isAjax()) {
-            $model = SourceModel::scope('list');
+            $model = TagsModel::scope('list');
             $list = $this->search($model)->paginate();
             $this->result($list->toArray(), 1);
         }
         return $this->fetch();
     }
     /**
-     * 添加来源
+     * 添加标签
      * @method   add
      * @DateTime 2017-03-31T16:39:49+0800
      * @param    string                   $value [description]
@@ -32,17 +32,17 @@ class Source extends Controller
     {
         if ($this->request->isAjax()) {
             try {
-                $source = new SourceModel;
-                $this->save($source);
+                $tags = new TagsModel;
+                $this->save($tags);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('添加书籍来源[id:' . $source->id . ']', 'index');
+            $this->success('添加书籍标签[id:' . $tags->id . ']', 'index');
         }
         return $this->fetch();
     }
     /**
-     * 修改来源
+     * 修改标签
      * @method   edit
      * @DateTime 2017-04-01T16:14:17+0800
      * @param    [type]                   $id [description]
@@ -50,25 +50,50 @@ class Source extends Controller
      */
     public function edit($id)
     {
-        $source = SourceModel::get($id);
-        if (empty($source)) {
-            $this->error('书籍来源不存在！');
+        $tags = TagsModel::get($id);
+        if (empty($tags)) {
+            $this->error('书籍标签不存在！');
         }
 
         if ($this->request->isAjax()) {
             try {
-                $this->save($source, ['id' => $id], 'edit');
+                $this->save($tags, ['id' => $id], 'edit');
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('修改书籍来源[id:' . $source->id . ']', 'index');
+            $this->success('修改书籍标签[id:' . $tags->id . ']', 'index');
         }
 
-        $this->assign('source', $source);
+        $this->assign('tags', $tags);
+        return $this->fetch();
+    }
+
+    /**
+     * iframe选择书籍标签
+     * @method   index
+     * @DateTime 2017-03-31T13:36:08+0800
+     * @return   [type]                   [description]
+     */
+    public function iframe()
+    {
+        $ids = $this->request->get('params');
+
+        if ($this->request->isAjax()) {
+            $model = TagsModel::scope('list');
+
+            $idArr = explode(',', $ids);
+            if (!empty($idArr)) {
+                $model = $model->where('id', 'not in', $idArr);
+            }
+            $list = $this->search($model)->paginate();
+            $this->result($list->toArray(), 1);
+        }
+
+        $this->assign('params', $ids);
         return $this->fetch();
     }
     /**
-     * 销毁来源
+     * 销毁标签
      * @method   destroy
      * @DateTime 2017-04-05T14:09:43+0800
      * @param    [type]                   $id [description]
@@ -77,13 +102,13 @@ class Source extends Controller
     public function destroy($id)
     {
         if ($this->request->isAjax()) {
-            $source = new SourceModel;
+            $tags = new TagsModel;
             try {
-                $this->delete($source, ['id' => $id]);
+                $this->delete($tags, ['id' => $id]);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
-            $this->success('删除书籍来源[id:' . $id . ']');
+            $this->success('删除书籍标签[id:' . $id . ']');
         }
     }
 
