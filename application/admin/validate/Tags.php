@@ -6,7 +6,7 @@ use luffyzhao\helper\Validate;
 class Tags extends Validate
 {
     protected $rule = [
-        'name|标签名称' => ['require', 'chsDash', 'max:50', 'unique'],
+        'name|标签名称' => ['require', 'chsDash', 'max:50', 'unique:tags,name'],
         'remark|标签说明' => ['max:255'],
         'en_name|英文标签' => ['require', 'max:50', 'alphaDash'],
     ];

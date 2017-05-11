@@ -1,0 +1,68 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>书籍搜索</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" action="{:url('index',['id'=>$book['id']])}" search>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">书籍名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="search[name]" autocomplete="off" placeholder="书籍名称" class="layui-input">
+            </div>
+            <div class="layui-input-inline layui-btn-group">
+                <button class="layui-btn layui-btn-primary" lay-submit="" data-elem=".layui-body-table" lay-filter="search"><i class="iconfont icon-originalimage"></i></button>
+            </div>
+        </div>
+    </form>
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>书籍列表</legend>
+    </fieldset>
+
+    <table class="layui-table" lay-skin="line">
+        <colgroup>
+            <col width="50">
+            <col>
+            <col width="100">
+            <col width="100">
+            <col width="100">
+            <col width="200">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>章节名</th>
+                <th>字数</th>
+                <th>章节分组</th>
+                <th>采集状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="layui-body-table" data-url="{:url('index',['id'=>$book['id']])}" data-elem=".layui-body-table">
+            
+        </tbody>
+        <script type="text/html" class="layui-body-table-script">
+            {{#  layui.each(d.data.data, function(index, item){ }}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.word_count }}</td>
+                    <td>{{ item.group }}</td>
+                    {{# if(item.status == 0){ }}
+                    <td>未采集</td>
+                    {{# }else if(item.status == 1){ }}
+                    <td>已采集</td>
+                    {{# }else{ }}
+                    <td>章节报错</td>
+                    {{# } }}
+                    <td>
+                        <a class="layui-btn layui-btn-primary layui-btn-small" href="/admin/chapter/edit/id/{{ item.id }}">
+                            <i class="layui-icon">&#xe642;</i>
+                        </a>
+                        <a class="layui-btn layui-btn-primary layui-btn-small" href="/admin/chapter/gather/id/{{ item.id }}">
+                            <i class="layui-icon">&#xe642;</i>
+                        </a>
+                    </td>
+                </tr>
+            {{# }); }}
+        </script>
+    </table>
+    <div lay-page></div>

@@ -12,7 +12,7 @@ use think\Exception;
 class Book extends Controller
 {
     /**
-     * 用户组
+     * 书籍
      * @method   index
      * @DateTime 2017-03-31T13:36:08+0800
      * @return   [type]                   [description]
@@ -27,7 +27,7 @@ class Book extends Controller
         return $this->fetch();
     }
     /**
-     * 添加用户组
+     * 添加书籍
      * @method   add
      * @DateTime 2017-03-31T16:39:49+0800
      * @param    string                   $value [description]
@@ -83,7 +83,7 @@ class Book extends Controller
                 $this->save($book, [], 'edit', $data);
                 // 标签修改
                 if (isset($data['tags'])) {
-                    $oldtags = $book->tags;
+                    $oldtags = collection($book->tags()->column('tags.id'))->column('id');
                     $tags = array_values($data['tags']);
                     $deltags = array_values(array_diff($oldtags, $tags));
                     // 删除标签书籍数据
@@ -102,6 +102,8 @@ class Book extends Controller
                 Db::commit();
             } catch (Exception $e) {
                 Db::rollback();
+                throw $e;
+
                 $this->error($e->getMessage());
             }
             $this->success('修改书籍[id:' . $book->id . ']', 'index');

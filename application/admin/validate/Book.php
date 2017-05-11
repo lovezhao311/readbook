@@ -6,7 +6,7 @@ use luffyzhao\helper\Validate;
 class Book extends Validate
 {
     protected $rule = [
-        'name|书籍名称' => ['require', 'chsDash', 'max:100'],
+        'name|书籍名称' => ['require', 'chsDash', 'max:100', 'unique:book,name'],
         'alias|书籍别名' => ['require', 'max:100'],
         'image|书籍封面' => ['postfix:jpg,gif,png'],
         'isbn|书籍ISBN号' => ['max:20', 'alphaNum'],
