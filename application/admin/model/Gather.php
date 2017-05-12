@@ -9,6 +9,7 @@ class Gather extends Model
 
     protected $type = [
         'replace' => 'array',
+        'title' => 'array',
     ];
 
     /**
@@ -20,6 +21,6 @@ class Gather extends Model
      */
     protected function scopeList($query)
     {
-        $query->field('id,name,url')->order('create_time DESC');
+        $query->field('id,name,list,content')->order('create_time DESC');
     }
 }

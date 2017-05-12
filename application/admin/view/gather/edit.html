@@ -8,20 +8,40 @@
                 <input type="text" name="data[name]" value="{$gather.name}" autocomplete="off" placeholder="采集名称" class="layui-input">
             </div>
         </div>
+
+        {if condition="empty($gather['title'])"}
         <div class="layui-form-item">
-            <label class="layui-form-label"><span class="field-tip">*</span>采集网址</label>
-            <div class="layui-input-inline layui-input-inline-big">
-                <input type="text" name="data[url]" value="{$gather.url}" autocomplete="off" placeholder="采集网址" class="layui-input">
+            <label class="layui-form-label">标题替换</label>
+            <div class="layui-input-inline layui-input-inline-group">
+                <input type="text" name="data[title][search][]" autocomplete="off" placeholder="搜索" class="layui-input">
             </div>
-            <div class="layui-form-mid layui-word-aux">{literal}采集站点的搜索页面 可以用 {$bookname} 表示书籍的名称 {/literal}</div>
+            <div class="layui-input-inline layui-input-inline-group">
+                <input type="text" name="data[title][replace][]" autocomplete="off" placeholder="替换" class="layui-input">
+            </div>
+            <a class="layui-btn layui-btn-primary" data-title data-parts="true"><i class="layui-icon">&#xe654;</i>添加</a>
         </div>
+        {/if}
+        {volist name="$gather.title" id="vo"}
         <div class="layui-form-item">
-            <label class="layui-form-label"><span class="field-tip">*</span>搜索页面</label>
-            <div class="layui-input-inline layui-input-inline-big">
-                <input type="text" name="data[search]" value="{$gather.search}" autocomplete="off" placeholder="搜索页面" class="layui-input">
+            {if condition="$key eq 0"}
+            <label class="layui-form-label">标题替换</label>
+            {else}
+            <label class="layui-form-label layui-form-label-group"></label>
+            {/if}
+            <div class="layui-input-inline layui-input-inline-group">
+                <input type="text" name="data[title][search][]" value="{$vo.search??''}" autocomplete="off" placeholder="搜索" class="layui-input">
             </div>
-            <div class="layui-form-mid layui-word-aux">采集书籍搜索页面选择器dom.</div>
+            <div class="layui-input-inline layui-input-inline-group">
+                <input type="text" name="data[title][replace][]" value="{$vo.replace??''}" autocomplete="off" placeholder="替换" class="layui-input">
+            </div>
+            {if condition="$key eq 0"}
+            <a class="layui-btn layui-btn-primary" data-title data-parts="true"><i class="layui-icon">&#xe654;</i>添加</a>
+            {else}
+            <a class="layui-btn layui-btn-primary" data-title data-parts="false"><i class="layui-icon">&#xe640;</i>删除</a>
+            {/if}
         </div>
+        {/volist}
+
         <div class="layui-form-item">
             <label class="layui-form-label"><span class="field-tip">*</span>列表页面</label>
             <div class="layui-input-inline layui-input-inline-big">
@@ -92,6 +112,19 @@
         </div>
     </script>
 
+    <script id="title-input" type="text/html">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-label-group"></label>
+            <div class="layui-input-inline layui-input-inline-group">
+                <input type="text" name="data[title][search][]" autocomplete="off" placeholder="搜索" class="layui-input">
+            </div>
+            <div class="layui-input-inline layui-input-inline-group">
+                <input type="text" name="data[title][replace][]" autocomplete="off" placeholder="替换" class="layui-input">
+            </div>
+            <a class="layui-btn layui-btn-primary" data-title data-parts="false"><i class="layui-icon">&#xe640;</i>删除</a>
+        </div>
+    </script>
+
     <script type="text/javascript">
         layui.define(['layer', 'jquery', 'laytpl', 'form'], function(exports) {
             var $ = layui.jquery,
@@ -105,6 +138,21 @@
                 if ($op) {
                     // console.log($this.parent().parent());
                     laytpl($('#replace-input').html()).render({}, function(html) {
+                        $this.parent().after(html);
+                    });
+                } else {
+                    $this.parent().remove();
+                }
+            });
+
+            $(document).on('click', '[data-title]', function() {
+                var $this = $(this),
+                    $op = $(this).data('parts');
+                // 等于真新增
+                // 等于假删除
+                if ($op) {
+                    // console.log($this.parent().parent());
+                    laytpl($('#title-input').html()).render({}, function(html) {
                         $this.parent().after(html);
                     });
                 } else {

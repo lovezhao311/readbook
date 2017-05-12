@@ -1,8 +1,10 @@
 <?php
 namespace app\admin\library;
 
-use think\Db;
+use app\admin\model\BookChapter as BookChapterModel;
+use app\admin\model\Gather as GatherModel;
 use think\Exception;
+use think\Model;
 
 class Gather
 {
@@ -33,23 +35,25 @@ class Gather
         }
     }
     /**
-     * 通过章节标题采集章节
+     * 通过章节信息采集章节内容
      * @method   chapter
-     * @DateTime 2017-05-11T16:17:31+0800
-     * @param    [type]                   $title 章节标题
-     * @return   [type]                          [description]
+     * @DateTime 2017-05-12T10:19:39+0800
+     * @param    [type]                   $bookChapter [description]
+     * @return   [type]                                [description]
      */
-    public function chapter($title)
+    public function chapter(Model $bookChapter)
     {
         $gather = $this->getGather();
-        $chapterDom = $this->load();
-
-        $lists = $chapterDom->find($gather['list']);
+        $bookDom = $this->load($this->rule['list_url']);
+        $lists = $bookDom->find($gather['list']);
+        $title = $this->title($bookChapter['name'], $gather['title']);
 
         $href = '';
-        foreach ($lists as $list) {
-            if ($this->contain($title, $list->getPlainText())) {
-                $href = $list->getAttr('href');
+        if (!empty($lists)) {
+            foreach ($lists as $list) {
+                if ($title == $list->getPlainText()) {
+                    $href = $list->href;
+                }
             }
         }
 
@@ -57,11 +61,54 @@ class Gather
             throw new Exception('未采集到该章节！');
         }
 
-        $chapterUrl = $this->montageUrl($href);
+        $content = $this->getContent($href, $gather);
+        if ($content == null) {
+            throw new Exception('采集失败！');
+        }
 
-        return $chapterUrl;
+        $this->updateChapter($bookChapter, $content);
+        return $content;
     }
+    /**
+     * 更新章节
+     * @method   updateChapter
+     * @DateTime 2017-05-12T10:21:07+0800
+     * @param    [type]                   $bookChapter [description]
+     * @param    [type]                   $content     [description]
+     * @return   [type]                                [description]
+     */
+    protected function updateChapter($bookChapter, $content)
+    {
+        return BookChapterModel::update([
+            'content' => $content,
+            'status' => 1,
+        ], ['id' => $bookChapter['id']]);
+    }
+    /**
+     * 获取章节内容
+     * @method   getContent
+     * @DateTime 2017-05-12T10:10:51+0800
+     * @param    [type]                   $chapterDom [description]
+     * @param    [type]                   $selector   [description]
+     * @return   [type]                               [description]
+     */
+    protected function getContent($url, $gather)
+    {
+        // url 处理
+        $chapterUrl = $this->montageUrl($url);
 
+        $chapterDom = $this->load($chapterUrl);
+        $contentDom = $chapterDom->find($gather['content'], 0);
+        if (empty($contentDom)) {
+            return null;
+        }
+        $content = strip_tags($contentDom->innerHtml(), '<p><a><br>');
+        // 内容替换
+        $content = $this->replace($content, $gather['replace']);
+        $content = str_ireplace(' ', '', $content);
+        $content = str_ireplace('$nbsp;', '', $content);
+        return "<p>{$content}</p>";
+    }
     /**
      * 拼接URL
      * @method   montageUrl
@@ -76,9 +123,8 @@ class Gather
             $append = substr($append, 1);
             $local = $this->getHost($this->rule['list_url']);
         } else {
-            $local = $this->getHost($this->rule['list_url'], false);
+            $local = $this->getHost($this->rule['list_url'], true);
         }
-
         return $local . $append;
     }
     /**
@@ -101,17 +147,31 @@ class Gather
      * @param    [type]                   $text  [description]
      * @return   [type]                          [description]
      */
-    protected function contain($title, $text)
+    protected function title($title, $replace)
     {
-        if ($title == $text) {
-            return true;
+        if (!empty($replace)) {
+            // 内容替换
+            $title = $this->replace($title, $replace);
         }
-        $title = str_ireplace('（', ' ', $title);
-        $title = str_ireplace('）', ' ', $title);
-        if ($title == $text) {
-            return true;
+        return trim($title);
+    }
+    /**
+     * 内容替换
+     * @method   replace
+     * @DateTime 2017-05-12T12:28:47+0800
+     * @param    [type]                   $value   [description]
+     * @param    [type]                   $replace [description]
+     * @return   [type]                            [description]
+     */
+    protected function replace($value, $replace)
+    {
+        if (empty($replace)) {
+            return $value;
         }
-        return false;
+        foreach ($replace as $key => $val) {
+            $value = str_ireplace($val['search'], $val['replace'], $value);
+        }
+        return $value;
     }
     /**
      * 获取采集配置
@@ -121,7 +181,7 @@ class Gather
      */
     protected function getGather()
     {
-        return Db::name('gather')->find($this->rule['gather_id']);
+        return GatherModel::get($this->rule['gather_id']);
     }
     /**
      * 获取文件 本地&远程
@@ -130,9 +190,9 @@ class Gather
      * @param    [type]                   $url [description]
      * @return   [type]                        [description]
      */
-    protected function load()
+    protected function load($url)
     {
-        $html = file_get_contents($this->rule['list_url']);
+        $html = file_get_contents($url);
         return new ParserDom($html);
     }
 }

@@ -25,29 +25,7 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
             }
             return false;
         }
-        /**
-         * 菜单
-         * @method   rule
-         * @DateTime 2017-03-24T15:37:34+0800
-         * @param    {[type]}                 t [description]
-         * @return   {[type]}                   [description]
-         */
-    layui.rule = function(opt) {
-            if (opt.href == 'javascript:;') {
-                return false;
-            }
-            if ($('[lay-id="LAY_preview' + opt.rule + '"]').length == 0) {
-                var preview = '<iframe name="LAY_preview_' + opt.rule + '" src="' + opt.href + '" frameborder="0" style="width: 100%; height: 100%; display: inline;"></iframe>';
-                element.tabAdd('iframe', {
-                    "title": opt.title,
-                    "content": preview,
-                    "id": 'LAY_preview' + opt.rule
-                });
-            } else {
-                window.frames["LAY_preview_" + opt.rule].location.reload();
-            }
-            element.tabChange('iframe', 'LAY_preview' + opt.rule);
-        }
+
         /**
          * ajax 成功返回后的数据处理
          * @method   done
@@ -125,7 +103,21 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
                                 layui.list(el, params);
                             }
                         });
+                    }else{
+                        var pageCont = el.parents('.layui-table').next('[lay-page]');
+                        layui.laypage({
+                            "cont": pageCont,
+                            "curr": 1,
+                            "pages": 1
+                        });
                     }
+                }else{
+                    var pageCont = el.parents('.layui-table').next('[lay-page]');
+                    layui.laypage({
+                        "cont": pageCont,
+                        "curr": 1,
+                        "pages": 1
+                    });
                 }
 
             });

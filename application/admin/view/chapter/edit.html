@@ -1,0 +1,52 @@
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>书籍作者添加</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" method="post" action="{:url('edit',['id'=>$chapter['id']])}">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>章节标题</label>
+            <div class="layui-input-inline layui-input-inline-big">
+                <input type="text" name="data[name]" value="{$chapter.name}" autocomplete="off" placeholder="章节标题" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>采集状态</label>
+            <div class="layui-input-inline layui-input-inline-big">
+                <input type="radio" name="data[status]" value="0" title="未采集" {form:checked name="$chapter.status" id="0"}>
+                <input type="radio" name="data[status]" value="1" title="已采集" {form:checked name="$chapter.status" id="1"}>
+            </div>
+            <label class="layui-form-label"><span class="field-tip">*</span>报错状态</label>
+            <div class="layui-input-inline layui-input-inline-big">
+                <input type="radio" name="data[error]" value="0" title="未报错" {form:checked name="$chapter.error" id="0"}>
+                <input type="radio" name="data[error]" value="1" title="有报错" {form:checked name="$chapter.error" id="1"}>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">章节内容</label>
+            <div class="layui-input-block">
+                <textarea placeholder="章节内容" id="content" name="data[content]" class="layui-textarea">{$chapter.content}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
+        </div>
+    </form>
+
+    <script>
+        layui.use('layedit', function(){
+            var layedit = layui.layedit;
+            layedit.build('content',{
+                "height":700,
+                "tool": [
+                    'strong' //加粗
+                      ,'italic' //斜体
+                      ,'underline' //下划线
+                      ,'del' //删除线
+                      ,'|' //分割线
+                      ,'left' //左对齐
+                      ,'center' //居中对齐
+                      ,'right' //右对齐
+                      ,'help' //帮助
+                ]
+            }); //建立编辑器
+        });
+    </script>

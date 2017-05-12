@@ -27,7 +27,7 @@ class BookChapter extends Model
     protected function scopeList($query)
     {
         $query->alias('a')
-            ->field(['id', 'name', 'word_count', 'group', 'status'], false, 'book_chapter');
+            ->field(['id', 'name', 'word_count', 'group', 'status', 'error', 'create_time'], false, 'book_chapter');
     }
     /**
      * 采集
@@ -41,6 +41,7 @@ class BookChapter extends Model
         $query->alias('a')
             ->join('book b', 'b.id=a.book_id')
             ->field(['id', 'name'], false, 'book_chapter')
-            ->field(['id', 'gather', 'name'], false, 'book', 'b', 'book_');
+            ->field(['id', 'gather', 'name'], false, 'book', 'b', 'book_')
+            ->where('status', 0);
     }
 }

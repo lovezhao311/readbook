@@ -1,20 +1,49 @@
     <fieldset class="layui-elem-field layui-field-title">
-        <legend>书籍搜索</legend>
+        <legend>章节搜索</legend>
     </fieldset>
     <form class="layui-form layui-form-pane" action="{:url('index',['id'=>$book['id']])}" search>
         <div class="layui-form-item">
 
-            <label class="layui-form-label">书籍名称</label>
+            <label class="layui-form-label">章节标题</label>
             <div class="layui-input-inline">
-                <input type="text" name="search[name]" autocomplete="off" placeholder="书籍名称" class="layui-input">
+                <input type="text" name="search[name]" autocomplete="off" placeholder="章节标题" class="layui-input">
             </div>
+
+            <label class="layui-form-label">章节分组</label>
+            <div class="layui-input-inline">
+                <select name="search[group]">
+                    <option value="">请选择</option>
+                    <option value="作品相关">作品相关</option>
+                    <option value="正文">正文</option>
+                    <option value="VIP卷">VIP卷</option>
+                </select>
+            </div>
+
+            <label class="layui-form-label">采集状态</label>
+            <div class="layui-input-inline">
+                <select name="search[status]">
+                    <option value="">请选择</option>
+                    <option value="0">未采集</option>
+                    <option value="1">已采集</option>
+                </select>
+            </div>
+
+            <label class="layui-form-label">报错状态</label>
+            <div class="layui-input-inline">
+                <select name="search[error]">
+                    <option value="">请选择</option>
+                    <option value="0">未报错</option>
+                    <option value="1">有报错</option>
+                </select>
+            </div>
+
             <div class="layui-input-inline layui-btn-group">
                 <button class="layui-btn layui-btn-primary" lay-submit="" data-elem=".layui-body-table" lay-filter="search"><i class="iconfont icon-originalimage"></i></button>
             </div>
         </div>
     </form>
     <fieldset class="layui-elem-field layui-field-title">
-        <legend>书籍列表</legend>
+        <legend>章节列表</legend>
     </fieldset>
 
     <table class="layui-table" lay-skin="line">
@@ -24,15 +53,19 @@
             <col width="100">
             <col width="100">
             <col width="100">
+            <col width="100">
+            <col width="200">
             <col width="200">
         </colgroup>
         <thead>
             <tr>
                 <th>ID</th>
-                <th>章节名</th>
+                <th>章节标题</th>
                 <th>字数</th>
                 <th>章节分组</th>
                 <th>采集状态</th>
+                <th>报错状态</th>
+                <th>更新时间</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -48,17 +81,21 @@
                     <td>{{ item.group }}</td>
                     {{# if(item.status == 0){ }}
                     <td>未采集</td>
-                    {{# }else if(item.status == 1){ }}
-                    <td>已采集</td>
                     {{# }else{ }}
-                    <td>章节报错</td>
+                    <td>已采集</td>
                     {{# } }}
+                    {{# if(item.error == 0){ }}
+                    <td>未报错</td>
+                    {{# }else{ }}
+                    <td>有报错</td>
+                    {{# } }}
+                    <td>{{ item.create_time }}</td>
                     <td>
                         <a class="layui-btn layui-btn-primary layui-btn-small" href="/admin/chapter/edit/id/{{ item.id }}">
                             <i class="layui-icon">&#xe642;</i>
                         </a>
-                        <a class="layui-btn layui-btn-primary layui-btn-small" href="/admin/chapter/gather/id/{{ item.id }}">
-                            <i class="layui-icon">&#xe642;</i>
+                        <a class="layui-btn layui-btn-primary layui-btn-small" href="/admin/chapter/gather/id/{{ item.id }}"  lay-delete data-msg="确定要采集吗？">
+                            <i class="layui-icon">&#xe636;</i>
                         </a>
                     </td>
                 </tr>

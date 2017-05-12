@@ -37,6 +37,9 @@ class Gather extends Controller
                 if (isset($data['replace'])) {
                     $data['replace'] = $this->replace($data['replace']);
                 }
+                if (isset($data['title'])) {
+                    $data['title'] = $this->replace($data['title']);
+                }
                 $this->save($gather, [], 'add', $data);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
@@ -63,6 +66,9 @@ class Gather extends Controller
                 $data = $this->request->post('data/a');
                 if (isset($data['replace'])) {
                     $data['replace'] = $this->replace($data['replace']);
+                }
+                if (isset($data['title'])) {
+                    $data['title'] = $this->replace($data['title']);
                 }
                 $this->save($gather, ['id' => $id], 'edit', $data);
             } catch (Exception $e) {

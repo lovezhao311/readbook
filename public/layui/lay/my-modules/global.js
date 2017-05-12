@@ -22,14 +22,14 @@ layui.define(['layer', 'code', 'form', 'element', 'util','laytpl'], function(exp
       return false;
     }
     if($('[lay-id="LAY_preview'+opt.rule+'"]').length == 0){
-      var preview = '<iframe name="LAY_preview_'+opt.rule+'" src="'+opt.href+'" frameborder="0" style="width: 100%; height: 100%; display: inline;"></iframe>';
+      var preview = '<iframe id="LAY_preview_'+opt.rule+'" name="LAY_preview_'+opt.rule+'" src="'+opt.href+'" frameborder="0" style="width: 100%; height: 100%; display: inline;"></iframe>';
       element.tabAdd('iframe', {
         "title":opt.title,
         "content": preview,
         "id":'LAY_preview'+opt.rule
       });
     }else{
-      window.frames["LAY_preview_"+opt.rule].location.reload();
+        $('#LAY_preview_'+opt.rule).attr('src',opt.href);
     }
     element.tabChange('iframe', 'LAY_preview'+opt.rule);
   } 

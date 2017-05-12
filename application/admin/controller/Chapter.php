@@ -40,15 +40,15 @@ class Chapter extends Controller
     {
         $chapter = BookChapterModel::scope('gather')->find($id);
         if (empty($chapter)) {
-            $this->error('章节不存在！');
+            $this->error('章节不存在,或者已采集!');
         }
         try {
             $gatherLibrary = new GatherLibrary($chapter['id'], json_decode($chapter['book_gather'], true));
-            $gatherLibrary->chapter($chapter['name']);
+            $gatherLibrary->chapter($chapter);
         } catch (Exception $e) {
             $this->error($e->getMessage());
         }
-
+        $this->success('采集');
     }
     /**
      * 修改章节
@@ -64,7 +64,16 @@ class Chapter extends Controller
             $this->error('章节不存在！');
         }
 
-        $this->assign('chapter', $chapter[]);
+        if ($this->request->isAjax()) {
+            try {
+                $this->save($chapter, ['id' => $id], 'edit');
+            } catch (Exception $e) {
+                $this->error($e->getMessage());
+            }
+            $this->success('修改章节[id:' . $chapter->id . ']');
+        }
+
+        $this->assign('chapter', $chapter);
         return $this->fetch();
     }
 }

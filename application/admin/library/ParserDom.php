@@ -60,68 +60,6 @@ class ParserDom
         $this->clearNode($this->node);
     }
     /**
-     * 广度优先查询
-     *
-     * @param string $selector
-     * @param number $idx 找第几个,从0开始计算，null 表示都返回, 负数表示倒数第几个
-     * @return ParserDom|ParserDom[]
-     */
-    /*public function findBreadthFirst($selector, $idx = null) {
-    if (empty($this->node->childNodes)) {
-    return false;
-    }
-    $selectors = $this->parse_selector($selector);
-    if (($count = count($selectors)) === 0) {
-    return false;
-    }
-    $found = array();
-    for ($c = 0; $c < $count; $c++) {
-    if (($level = count($selectors [$c])) === 0) {
-    return false;
-    }
-    $need_to_search = iterator_to_array($this->node->childNodes);
-    $search_level = 1;
-    while (!empty($need_to_search)) {
-    $temp = array();
-    foreach ($need_to_search as $search) {
-    if ($search_level >= $level) {
-    $rs = $this->seek($search, $selectors [$c], $level - 1);
-    if ($rs !== false && $idx !== null) {
-    if ($idx == count($found)) {
-    return new self($rs);
-    } else {
-    $found[] = new self($rs);
-    }
-    } elseif ($rs !== false) {
-    $found[] = new self($rs);
-    }
-    }
-    $temp[] = $search;
-    array_shift($need_to_search);
-    }
-    foreach ($temp as $temp_val) {
-    if (!empty($temp_val->childNodes)) {
-    foreach ($temp_val->childNodes as $val) {
-    $need_to_search[] = $val;
-    }
-    }
-    }
-    $search_level++;
-    }
-    }
-    if ($idx !== null) {
-    if ($idx < 0) {
-    $idx = count($found) + $idx;
-    }
-    if (isset($found[$idx])) {
-    return $found[$idx];
-    } else {
-    return false;
-    }
-    }
-    return $found;
-    }*/
-    /**
      * 深度优先查询
      *
      * @param string $selector
