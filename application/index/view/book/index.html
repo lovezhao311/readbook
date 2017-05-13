@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{$book.name}</title>
+</head>
+<body>
+    <div style="margin: 20px 50px;">
+        <ul>
+            {volist name='$chapters' id="vo"}
+            <li><a href="{:url('index/book/chapter',['bid'=>$book['id'],'id'=>$vo['id']])}">{$vo.name}</a></li>
+            {/volist}
+        </ul>
+    </div>
+</body>
+</html>

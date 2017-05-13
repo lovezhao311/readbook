@@ -8,7 +8,7 @@ class Chapter extends Search
     protected $rules = [
         'index' => [
             'name' => ['whereLike', 'a.name'],
-            'group' => ['where', 'a.group'],
+            'subsection_id' => ['where', 'a.subsection_id'],
             'status' => ['where', 'a.status'],
             'error' => ['where', 'a.error'],
         ],

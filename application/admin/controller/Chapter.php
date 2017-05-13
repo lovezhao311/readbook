@@ -5,6 +5,7 @@ use app\admin\library\Controller;
 use app\admin\library\Gather as GatherLibrary;
 use app\admin\model\Book as BookModel;
 use app\admin\model\BookChapter as BookChapterModel;
+use app\admin\model\BookSubsection;
 use think\Exception;
 
 class Chapter extends Controller
@@ -22,11 +23,14 @@ class Chapter extends Controller
             $this->error('书籍不存在！');
         }
         if ($this->request->isAjax()) {
-            $model = BookChapterModel::scope('list')->where('book_id', $id);
+            $model = BookChapterModel::scope('list')->where('a.book_id', $id);
             $list = $this->search($model)->paginate();
             $this->result($list->toArray(), 1);
         }
 
+        $subsections = BookSubsection::scope('option')->where('book_id', $id)->select();
+
+        $this->assign('subsections', $subsections);
         $this->assign('book', $book);
         return $this->fetch();
     }

@@ -27,7 +27,10 @@ class BookChapter extends Model
     protected function scopeList($query)
     {
         $query->alias('a')
-            ->field(['id', 'name', 'word_count', 'group', 'status', 'error', 'create_time'], false, 'book_chapter');
+            ->field(['id', 'name', 'word_count', 'status', 'error', 'create_time'], false, 'book_chapter')
+            ->field(['id', 'name'], false, 'book_subsection', 'bs', 'subsection_')
+            ->join('book_subsection bs', 'bs.id=a.subsection_id')
+            ->order('bs.sort ASC, bs.id ASC');
     }
     /**
      * 采集

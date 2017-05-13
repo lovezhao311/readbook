@@ -1,0 +1,54 @@
+<!--index.wxml-->
+<!-- 中间内容 -->
+<swiper class="top" indicator-dots="true" autoplay="true" interval="5000" duration="500">
+    <swiper-item>
+      <image mode="aspectFill" src="http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg"/>
+    </swiper-item>
+    <swiper-item>
+      <image mode="aspectFill" src="http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg"/>
+    </swiper-item>
+    <swiper-item>
+      <image mode="aspectFill" src="http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg" />
+    </swiper-item>
+</swiper>
+
+<scroll-view class="container" scroll-y="true">
+   <view class="list">
+    <view class="item">
+      <image mode="aspectFill" src="http://readbook.com/uploads/20170511/a016c0e36d428964b4ad926ab8817e86.jpg"></image>
+      <navigator class="remark" url="/pages/book/index" hover-class="none">
+        <view><text class="name">地霸<text class="wx-iconfont wx-icon1607"></text></text></view>
+        <view><text>唐家三少 著 | 2017-02-02</text></view>
+        <view><text>更新至:第七十五章 死一个人（上）</text></view>
+      </navigator>
+      <view class="handle">
+        <navigator url="" class="wx-iconfont wx-gengduo"></navigator>
+      </view>
+    </view>    
+  </view>
+</scroll-view>
+
+
+<!-- 导航 -->
+<view class="navigation flex-wrp">
+  <view class="item">
+    <navigator url="" class="this" hover-class="none">
+      <text class="wx-iconfont wx-index"></text>
+    </navigator>
+  </view>
+  <view class="item">
+    <navigator url="" hover-class="none">
+      <text class="wx-iconfont wx-jingpin"></text>
+    </navigator>
+  </view>
+  <view class="item">
+    <navigator url="" hover-class="none">
+      <text class="wx-iconfont wx-faxian"></text>
+    </navigator>
+  </view>
+  <view class="item">
+    <navigator url="" hover-class="none">
+      <text class="wx-iconfont wx-wo"></text>
+    </navigator>
+  </view>
+</view>

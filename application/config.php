@@ -4,7 +4,7 @@ return [
     // 应用Trace
     'app_trace' => false,
 
-    'default_module' => 'admin',
+    'default_module' => 'index',
 
     // 验证码
     'captcha' => [

@@ -11,11 +11,11 @@
 
             <label class="layui-form-label">章节分组</label>
             <div class="layui-input-inline">
-                <select name="search[group]">
+                <select name="search[subsection_id]">
                     <option value="">请选择</option>
-                    <option value="作品相关">作品相关</option>
-                    <option value="正文">正文</option>
-                    <option value="VIP卷">VIP卷</option>
+                    {volist name="subsections" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
                 </select>
             </div>
 
@@ -78,7 +78,7 @@
                     <td>{{ item.id }}</td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.word_count }}</td>
-                    <td>{{ item.group }}</td>
+                    <td>{{ item.subsection_name }}</td>
                     {{# if(item.status == 0){ }}
                     <td>未采集</td>
                     {{# }else{ }}

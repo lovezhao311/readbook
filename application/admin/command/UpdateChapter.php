@@ -5,6 +5,9 @@ use luffyzhao\helper\Command;
 use think\console\Input;
 use think\console\Output;
 use think\Db;
+use think\Exception;
+use think\exception\PDOException;
+use think\Log;
 
 class UpdateChapter extends Command
 {
@@ -29,63 +32,53 @@ class UpdateChapter extends Command
     protected function execute(Input $input, Output $output)
     {
         // $this->lock();
-        $this->bookQuery()->chunk(20, function ($books) use ($output) {
-            foreach ($books as $book) {
-                if (empty($book['source_url'])) {
-                    $output->writeln($book['name'] . '来源地址错误！');
-                    continue;
-                }
-                $url = $this->sourceUrl($book);
-                $chapterJson = $this->chapter($url);
-                if ($chapterJson === false) {
-                    $output->writeln($book['name'] . '获取章节列表失败！');
-                    continue;
-                }
-
-                $chapterTotal = $book['chapter_total'];
-                $wordCount = 0;
-                $bookChapterId = 0;
-                // 不需要更新
-                if ($chapterJson['chapterTotalCnt'] <= $chapterTotal) {
-                    continue;
-                }
-                //
-                $chapters = $this->notUpdateChapter($chapterJson['vs'], $chapterTotal);
-                if (empty($chapters)) {
-                    continue;
-                }
-                $chapterData = [];
-                foreach ($chapters as $chapter) {
-                    $chapterData[] = [
-                        'book_id' => $book['id'],
-                        'name' => $chapter['cN'],
-                        'word_count' => $chapter['cnt'],
-                        'group' => $chapter['group'],
-                        'create_time' => $chapter['uT'],
-                        'modify_time' => $chapter['uT'],
-                    ];
-                    $wordCount += $chapter['cnt'];
-                }
-                $chaptersChunk = collection($chapterData)->chunk(1000);
-
-                $bookData = ['chapter_total' => $chapterTotal, 'word_count' => $wordCount, 'last_chapter_id' => $bookChapterId];
-                foreach ($chaptersChunk as $chunk) {
-                    Db::startTrans();
-                    try {
-                        Db::name('book_chapter')->insertAll($chunk->toArray());
-                        Db::commit();
-                    } catch (Exception $e) {
-                        Db::rollback();
-                        $output->writeln($book['name'] . '章节更新失败!');
-                        $this->updateBook($book['id'], $bookData);
+        try {
+            $this->bookQuery()->chunk(20, function ($books) use ($output) {
+                foreach ($books as $book) {
+                    if (empty($book['source_url'])) {
+                        $output->writeln($book['name'] . '来源地址错误！');
                         continue;
                     }
-                    $bookData['last_chapter_id'] = $this->bookChaperId($book['id']);
-                    $bookData['chapter_total'] += count($chunk);
+                    $url = $this->sourceUrl($book);
+                    $chapterJson = $this->chapter($url);
+                    if ($chapterJson === false) {
+                        $output->writeln($book['name'] . '获取章节列表失败！');
+                        continue;
+                    }
+
+                    $chapterTotal = $book['chapter_total'];
+                    $wordCount = 0;
+                    $bookChapterId = 0;
+                    // 不需要更新
+                    if ($chapterJson['chapterTotalCnt'] <= $chapterTotal) {
+                        $output->writeln($book['name'] . '没有要更新的章节!');
+                        continue;
+                    }
+                    Db::startTrans();
+                    try {
+                        // 没有更新的章节
+                        $data = $this->notUpdateChapter($chapterJson['vs'], $book['id']);
+                        if (empty($data)) {
+                            $output->writeln($book['name'] . '没有要更新的章节!');
+                            continue;
+                        }
+                        $chunks = collection($data)->chunk(200);
+                        foreach ($chunks as $key => $value) {
+                            Db::name('book_chapter')->insertAll($value->toArray());
+                        }
+                        Db::commit();
+                    } catch (Exception $e) {
+                        Log::record($e->getMessage(), 'error');
+                        $output->writeln($e->getMessage());
+                        Db::rollback();
+                    }
+
                 }
-                $this->updateBook($book['id'], $bookData);
-            }
-        }, 'a.id');
+            }, 'a.id');
+        } catch (PDOException $e) {
+            Log::record($e->getMessage(), 'error');
+            $output->writeln('运行失败！' . $e->getMessage());
+        }
 
         // $this->lock(false);
     }
@@ -114,26 +107,104 @@ class UpdateChapter extends Command
         Db::name('book')->where('id', $id)->update($data);
     }
     /**
+     * 获取章节分卷
+     * @method   getSubsection
+     * @DateTime 2017-05-13T10:05:50+0800
+     * @param    string                   $value [description]
+     * @return   [type]                          [description]
+     */
+    protected function getSubsection($bookId)
+    {
+        return Db::name('book_subsection')->where('book_id', $bookId)->column('id,sort,chapter_count,word_count', 'name');
+    }
+    /**
+     * 更新章节分卷
+     * @method   updateSubsection
+     * @DateTime 2017-05-13T10:40:02+0800
+     * @return   [type]                   [description]
+     */
+    protected function updateSubsection($id, $group)
+    {
+        return Db::name('book_subsection')->where('id', $id)->update([
+            'chapter_count' => $group['wC'],
+            'word_count' => $group['wC'],
+        ]);
+    }
+    /**
+     * 新增章节分卷
+     * @method   insertSubsection
+     * @DateTime 2017-05-13T10:42:21+0800
+     * @param    string                   $value [description]
+     * @return   [type]                          [description]
+     */
+    protected function insertSubsection($bookId, $group)
+    {
+        $date = date('Y-m-d H:i:s');
+        return Db::name('book_subsection')->insertGetId([
+            'book_id' => $bookId,
+            'name' => $group['vN'],
+            'sort' => $group['vS'],
+            'chapter_count' => $group['cCnt'],
+            'word_count' => $group['wC'],
+            'create_time' => $date,
+            'modify_time' => $date,
+        ]);
+    }
+    /**
      * 没有更新的章节
      * @method   notUpdateChapter
-     * @DateTime 2017-05-11T14:13:50+0800
-     * @param    [type]                   $data [description]
-     * @return   [type]                         [description]
+     * @DateTime 2017-05-13T10:04:55+0800
+     * @param    [type]                   $data   [description]
+     * @param    [type]                   $bookId [description]
+     * @return   [type]                           [description]
      */
-    protected function notUpdateChapter($data, $chapterTotal)
+    protected function notUpdateChapter($data, $bookId)
     {
         $array = [];
-        $i = 0;
+        $subsections = $this->getSubsection($bookId);
+
         foreach ($data as $group) {
-            foreach ($group['cs'] as $value) {
-                // 未更新章节
-                if ($i >= $chapterTotal) {
-                    $array[$i] = $value;
-                    $array[$i]['group'] = $group['vN'];
+            $chapter = [];
+            if (isset($subsections[$group['vN']])) {
+                if ($subsections[$group['vN']]['chapter_count'] < $group['cCnt']) {
+                    $newChapter = array_slice($group['cs'], $subsections[$group['vN']]['chapter_count']);
+                    $chapter = $this->data($newChapter, $bookId, $subsections[$group['vN']]['id']);
+                    $this->updateSubsection($subsections[$group['vN']]['id'], $group);
                 }
-                $i++;
+            } else {
+                $subsectionId = $this->insertSubsection($bookId, $group);
+                $chapter = $this->data($group['cs'], $bookId, $subsectionId);
             }
+            $array = array_merge($array, $chapter);
         }
+        return $array;
+    }
+
+    /**
+     * 章节数据
+     * @method   chapter
+     * @DateTime 2017-05-13T10:26:05+0800
+     * @param    [type]                   $newChapter   [description]
+     * @param    [type]                   $subsectionId [description]
+     * @return   [type]                                 [description]
+     */
+    protected function data($newChapter, $bookId, $subsectionId)
+    {
+        $array = [];
+        if (empty($newChapter)) {
+            return $array;
+        }
+
+        foreach ($newChapter as $key => $value) {
+            $array[] = [
+                'book_id' => $bookId,
+                'name' => $value['cN'],
+                'word_count' => $value['cnt'],
+                'subsection_id' => $subsectionId,
+                'create_time' => $value['uT'],
+            ];
+        }
+
         return $array;
     }
     /**
@@ -188,7 +259,7 @@ class UpdateChapter extends Command
      */
     protected function bookQuery()
     {
-        return Db::name('book')->alias('a')
+        return Db::connect([], 'chapter_chunk')->name('book')->alias('a')
             ->field(['id', 'name', 'isbn', 'end_status', 'chapter_total'], false, 'book')
             ->field(['name', 'url'], false, 'source', 'so', 'source_')
             ->join('source so', 'so.id=a.source_id')
