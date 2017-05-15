@@ -19,7 +19,8 @@
         "php": ">=7.0.0",
         "topthink/framework": "^5.0",
         "luffyzhao/helper" : "^1.0",
-        "topthink/think-captcha": "^1.0"
+        "topthink/think-captcha": "^1.0",
+        "luffyzhao/wxhepler": "^1.0"
     },
     "extra": {
         "think-path": "thinkphp"

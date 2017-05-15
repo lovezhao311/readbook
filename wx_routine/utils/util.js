@@ -19,3 +19,48 @@ function formatNumber(n) {
 module.exports = {
   formatTime: formatTime
 }
+
+var myrequest = {
+  /**
+   * option:{
+   *  url: "",
+   *  method: "",
+   *  success: function(res){
+   *  }
+   * }
+   */
+  request: function (option){
+    var defaultOption = {
+      "url":option.url,
+      "method": option.method,
+      "dataType" : "json",
+      "header": {
+        "content-type": "application/json"
+      },
+      // 网络请求错误
+      "fail" : function(){
+        
+      },
+      // 网络请求完成
+      "complete": function(){
+      
+      },
+      // 网络请求成功
+      "success":function(res){
+        // 验证
+        myrequest.resule(res);
+        // 处理
+        option.success(res);
+      }
+    };
+
+    wx.request();
+  },
+  // 网络请求返回数据验证
+  resule:function(res){
+    // 操作失败
+    if(res.code == 0){
+
+    }
+  }
+}

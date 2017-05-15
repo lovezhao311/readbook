@@ -6,6 +6,10 @@ return [
 
     'default_module' => 'index',
 
+    'url_route_must' => false,
+    'url_domain_deploy' => true,
+    'url_domain_root' => 'readbook.com',
+
     // 验证码
     'captcha' => [
         // 验证码字符集合

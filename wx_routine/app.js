@@ -9,20 +9,19 @@ App({
         //登录态过期
         wx.login({
           success: function (res) {
-            // 登录态维护
-            wx.request({
-              url: 'http://readbook.com/api/onLogin',
-              data: {
-                "code": res.code
-              },
-              success: function (res) {
-                
-              }
-            })
             // 用户信息
             wx.getUserInfo({
+              withCredentials:true,
               success: function (res) {
-                that.globalData.userInfo = res.userInfo
+                // 登录态维护
+                myrequest.request({
+                  url: 'http://readbook.com/api/onLogin',
+                  data: {
+                    "encryptedData": res.encryptedData
+                  },
+                  success: function (res) {                    
+                  }
+                })
               }
             })
           }
