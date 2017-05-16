@@ -12,7 +12,7 @@ return [
     // 生成应用公共文件
     '__file__' => ['common.php', 'config.php', 'database.php'],
     // admin 模块
-    'admin' => [
+    'api' => [
         '__file__' => ['common.php'],
         '__dir__' => ['behavior', 'controller', 'model', 'view', 'library'],
         'controller' => [],

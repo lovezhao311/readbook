@@ -14,17 +14,19 @@
 
 <scroll-view class="container" scroll-y="true">
    <view class="list">
-    <view class="item">
-      <image mode="aspectFill" src="http://readbook.com/uploads/20170511/a016c0e36d428964b4ad926ab8817e86.jpg"></image>
-      <navigator class="remark" url="/pages/book/index" hover-class="none">
-        <view><text class="name">地霸<text class="wx-iconfont wx-icon1607"></text></text></view>
-        <view><text>唐家三少 著 | 2017-02-02</text></view>
-        <view><text>更新至:第七十五章 死一个人（上）</text></view>
+    <block wx:for="{{bookList.data}}"  wx:key="key" wx:for-item="item">
+    <view class="item" >
+      <image mode="aspectFill" src="http://image.luffybook.com{{item.image}}"></image>
+      <navigator class="remark" url="/pages/book/index?id={{item.id}}" hover-class="none">
+        <view><text class="name">{{item.name}}<text class="wx-iconfont wx-icon1607"></text></text></view>
+        <view><text>{{item.author_name}} 著 | {{item.modify_time}}</text></view>
+        <view><text>更新至:{{item.book_chapter_name}}</text></view>
       </navigator>
       <view class="handle">
         <navigator url="" class="wx-iconfont wx-gengduo"></navigator>
       </view>
-    </view>    
+    </view> 
+    </block>   
   </view>
 </scroll-view>
 

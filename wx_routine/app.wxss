@@ -1,5 +1,5 @@
 /**app.wxss**/
-@import "/fonts/iconfont.css";
+@import "/fonts/iconfont.wxss";
 
 /* 底部导航 */
 .navigation {

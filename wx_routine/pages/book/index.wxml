@@ -1,2 +1,2 @@
 <!--index.wxml-->
-<text>index.wxml</text>
+<text>{{id}}</text>

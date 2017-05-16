@@ -8,7 +8,6 @@ return [
 
     'url_route_must' => false,
     'url_domain_deploy' => true,
-    'url_domain_root' => 'readbook.com',
 
     // 验证码
     'captcha' => [

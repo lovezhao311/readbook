@@ -1,35 +1,25 @@
 //app.js
+var request = require('/utils/request.js')
 App({
   onLaunch: function () {
+    
+  },
+  getUserInfo: function(){
     wx.checkSession({
       success: function () {
-        //session 未过期，并且在本生命周期一直有效
+        try {
+          var userInfo = wx.getStorageSync('userInfo')
+          if (!userInfo) {
+            request.myrequest.login();
+          }
+        } catch (e) {
+          console.log(e);
+        }
       },
       fail: function () {
-        //登录态过期
-        wx.login({
-          success: function (res) {
-            // 用户信息
-            wx.getUserInfo({
-              withCredentials:true,
-              success: function (res) {
-                // 登录态维护
-                myrequest.request({
-                  url: 'http://readbook.com/api/onLogin',
-                  data: {
-                    "encryptedData": res.encryptedData
-                  },
-                  success: function (res) {                    
-                  }
-                })
-              }
-            })
-          }
-        }) //重新登录
+        request.myrequest.login();
       }
     })
-  },
-  globalData:{
-    userInfo:null
   }
 })
+
