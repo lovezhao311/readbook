@@ -249,7 +249,7 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
      * @return   {[type]}                        [description]
      */
     layui.upload({
-        url: '/admin/index/upload' //上传接口,
+        url: '/index/upload' //上传接口,
             ,
         method: 'post',
         ext: 'jpg|png|gif',
