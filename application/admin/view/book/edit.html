@@ -24,10 +24,10 @@
         <div class="layui-form-item">
             <label class="layui-form-label"><span class="field-tip">*</span>书籍标签</label>
             <div class="layui-input-block tags-input" pane="">
-                {volist name="$book->tags" id="vo"}
+                {volist name="$book->tag" id="vo"}
                 <span class="tag">
                 {$vo.name}
-                <input type="hidden" name="data[tags][]" value="{$vo.id}">
+                <input type="hidden" name="data[tags][{$vo.id}]" value="{$vo.name}">
                 <a href="#" title="Removing tag">x</a>
             </span>
                 {/volist}
@@ -56,6 +56,24 @@
                 <input type="radio" name="data[end_status]" value="2" title="完结" {form:checked name="$book.end_status" id="2"}>
             </div>
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">推荐类型</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="data[types][]" value="1" {if condition="in_array(1,$book['types'])"}checked="checked"{/if}  title="新书">
+                <input type="checkbox" name="data[types][]" value="2" {if condition="in_array(2,$book['types'])"}checked="checked"{/if}  title="热门">
+                <input type="checkbox" name="data[types][]" value="3" {if condition="in_array(3,$book['types'])"}checked="checked"{/if}  title="推荐">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">完结状态</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="data[end_status]" value="1" title="连载" {form:checked name="$book.end_status" id="1"}>
+                <input type="radio" name="data[end_status]" value="2" title="完结" {form:checked name="$book.end_status" id="2"}>
+            </div>
+        </div>
+
         <div class="layui-form-item layui-form-text layui-form-text-inline">
             <div class="form-item-group">
                 <label class="layui-form-label"><span class="field-tip">*</span>封面图片</label>
@@ -100,58 +118,28 @@
             <a class="layui-btn layui-btn-primary" data-gather data-parts="true"><i class="layui-icon">&#xe654;</i>添加</a>
         </div>
         {/if}
-        {volist name="$book.gather" id="vo" key="k"}
         <div class="layui-form-item">
             <label class="layui-form-label">采集地址</label>
             <div class="layui-input-inline layui-input-inline-group">
-                <select name="data[gather][gather_id][]" class="layui-input">
+                <select name="data[gather][gather_id]" class="layui-input">
                     <option value="">请选译</option>
                     {volist name="gathers" id="v"}
-                    <option value="{$v.id}" {form:selected name="$vo.gather_id" id="$v.id"}>{$v.name}</option>
+                    <option value="{$v.id}" {form:selected name="$book.gather.gather_id" id="$v.id"}>{$v.name}</option>
                     {/volist}
                 </select>
             </div>
             <div class="layui-input-inline layui-input-inline-big layui-input-inline-group">
-                <input type="text" name="data[gather][list_url][]" value="{$vo.list_url??''}" autocomplete="off" placeholder="列表页面地址" class="layui-input">
+                <input type="text" name="data[gather][list_url]" value="{$book.gather.list_url??''}" autocomplete="off" placeholder="列表页面地址" class="layui-input">
             </div>
-            <div class="layui-input-inline layui-input-inline-mini layui-input-inline-group">
-                <input type="text" name="data[gather][sort][]" value="{$vo.sort??''}" autocomplete="off" placeholder="排序" class="layui-input">
-            </div>
-            {if condition="$k eq 1"}
-            <a class="layui-btn layui-btn-primary" data-gather data-parts="true"><i class="layui-icon">&#xe654;</i>添加</a>
-            {else}
-            <a class="layui-btn layui-btn-primary" data-gather data-parts="false"><i class="layui-icon">&#xe640;</i>删除</a>
-            {/if}
         </div>
-        {/volist}
         <div class="layui-form-item">
             <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
         </div>
     </form>
-    <script id="gather-input" type="text/html">
-        <div class="layui-form-item">
-            <label class="layui-form-label layui-form-label-group"></label>
-            <div class="layui-input-inline layui-input-inline-group">
-                <select name="data[gather][gather_id][]" class="layui-input">
-                    <option value="">请选译</option>
-                    {volist name="gathers" id="vo"}
-                    <option value="{$vo.id}">{$vo.name}</option>
-                    {/volist}
-                </select>
-            </div>
-            <div class="layui-input-inline layui-input-inline-big layui-input-inline-group">
-                <input type="text" name="data[gather][list_url][]" autocomplete="off" placeholder="列表页面地址" class="layui-input">
-            </div>
-            <div class="layui-input-inline layui-input-inline-mini layui-input-inline-group">
-                <input type="text" name="data[gather][sort][]" autocomplete="off" placeholder="排序" class="layui-input">
-            </div>
-            <a class="layui-btn layui-btn-primary" data-gather data-parts="false"><i class="layui-icon">&#xe640;</i>删除</a>
-        </div>
-    </script>
     <script id="tags-input" type="text/html"> 
         <span class="tag">
             {{ d.name }}
-            <input type="hidden" name="data[tags][]" value="{{ d.id }}">
+            <input type="hidden" name="data[tags][{{ d.id }}]" value="{{ d.name }}">
             <a href="#" title="Removing tag">x</a>
         </span>
     </script>
@@ -161,29 +149,6 @@
             laytpl = layui.laytpl,
             form = layui.form(),
             layer = layui.layer;
-
-        /**
-         * 采集地址
-         * @method
-         * @DateTime 2017-03-04T16:32:41+0800
-         * @param    {[type]}                 ){                 } [description]
-         * @return   {[type]}                     [description]
-         */
-        $(document).on('click', '[data-gather]', function() {
-            var $this = $(this),
-                $op = $(this).data('parts');
-            // 等于真新增
-            // 等于假删除
-            if ($op) {
-                laytpl($('#gather-input').html()).render({}, function(html) {
-                    $this.parent().after(html);
-                    form.render('select')
-                });
-            } else {
-                $this.parent().remove();
-            }
-        });
-
 
     });
 

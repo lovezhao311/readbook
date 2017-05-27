@@ -31,7 +31,8 @@ class UpdateChapter extends Command
      */
     protected function execute(Input $input, Output $output)
     {
-        // $this->lock();
+        $this->lock();
+        Db::startTrans();
         try {
             $this->bookQuery()->chunk(20, function ($books) use ($output) {
                 foreach ($books as $book) {
@@ -47,14 +48,14 @@ class UpdateChapter extends Command
                     }
 
                     $chapterTotal = $book['chapter_total'];
-                    $wordCount = 0;
-                    $bookChapterId = 0;
+                    $wordCount = $book['word_count'];
+                    $bookChapterId = $book['last_chapter_id'];
                     // 不需要更新
                     if ($chapterJson['chapterTotalCnt'] <= $chapterTotal) {
-                        $output->writeln($book['name'] . '没有要更新的章节!');
+                        $output->writeln($book['name'] . '没有要更新的章节!!');
                         continue;
                     }
-                    Db::startTrans();
+
                     try {
                         // 没有更新的章节
                         $data = $this->notUpdateChapter($chapterJson['vs'], $book['id']);
@@ -65,7 +66,19 @@ class UpdateChapter extends Command
                         $chunks = collection($data)->chunk(200);
                         foreach ($chunks as $key => $value) {
                             Db::name('book_chapter')->insertAll($value->toArray());
+
+                            $wordCount += array_sum(array_column($value->toArray(), 'word_count'));
+                            $chapterTotal += count($value);
                         }
+                        $bookChapterId = $this->bookChaperId($book['id']);
+                        $output->writeln($book['name'] . '更新完毕!');
+
+                        $this->updateBook($book['id'], [
+                            'last_chapter_id' => $bookChapterId,
+                            'chapter_total' => $chapterTotal,
+                            'word_count' => $wordCount,
+                        ]);
+
                         Db::commit();
                     } catch (Exception $e) {
                         Log::record($e->getMessage(), 'error');
@@ -80,7 +93,7 @@ class UpdateChapter extends Command
             $output->writeln('运行失败！' . $e->getMessage());
         }
 
-        // $this->lock(false);
+        $this->lock(false);
     }
 
     /**
@@ -260,7 +273,7 @@ class UpdateChapter extends Command
     protected function bookQuery()
     {
         return Db::connect([], 'chapter_chunk')->name('book')->alias('a')
-            ->field(['id', 'name', 'isbn', 'end_status', 'chapter_total'], false, 'book')
+            ->field(['id', 'name', 'isbn', 'end_status', 'chapter_total', 'last_chapter_id', 'word_count'], false, 'book')
             ->field(['name', 'url'], false, 'source', 'so', 'source_')
             ->join('source so', 'so.id=a.source_id')
             ->where('end_status', 1);

@@ -30,7 +30,7 @@ class BookChapter extends Model
             ->field(['id', 'name', 'word_count', 'status', 'error', 'create_time'], false, 'book_chapter')
             ->field(['id', 'name'], false, 'book_subsection', 'bs', 'subsection_')
             ->join('book_subsection bs', 'bs.id=a.subsection_id')
-            ->order('bs.sort ASC, bs.id ASC');
+            ->order('bs.sort ASC, bs.id ASC, a.id ASC');
     }
     /**
      * 采集

@@ -6,6 +6,12 @@ use think\Model;
 class Book extends Model
 {
 
+    protected $type = [
+        'gather' => 'array',
+        'tags' => 'array',
+        'types' => 'array',
+    ];
+
     public function chapter()
     {
         return $this->hasMany('BookChapter', 'a.book_id', 'id')
@@ -25,12 +31,10 @@ class Book extends Model
     protected function scopeShow($query)
     {
         $query->alias('a')
-            ->field(['create_time', 'modify_time', 'gather'], true, 'book')
+            ->field(['create_time', 'modify_time', 'alias', 'isbn', 'source_id', 'types', 'gather', 'last_chapter_id'], true, 'book')
             ->field(['id', 'name'], false, 'author', 'au', 'author_')
-            ->field(['id', 'name'], false, 'source', 'so', 'source_')
             ->field(['id', 'name'], false, 'book_chapter', 'bc', 'book_chapter_')
             ->join('author au', 'au.id=a.author_id', 'left')
-            ->join('source so', 'so.id=a.source_id', 'left')
             ->join('book_chapter bc', 'bc.id=a.last_chapter_id', 'left');
     }
     /**
@@ -43,10 +47,8 @@ class Book extends Model
     protected function scopeList($query)
     {
         $query->alias('a')
-            ->field(['id', 'name', 'isbn', 'end_status', 'image', 'modify_time'], false, 'book')
+            ->field(['id', 'name', 'image', 'tags', 'remark'], false, 'book')
             ->field(['name'], false, 'author', 'au', 'author_')
-            ->field(['id', 'name'], false, 'book_chapter', 'bc', 'book_chapter_')
-            ->join('author au', 'au.id=a.author_id', 'left')
-            ->join('book_chapter bc', 'bc.id=a.last_chapter_id', 'left');
+            ->join('author au', 'au.id=a.author_id', 'left');
     }
 }

@@ -29,7 +29,7 @@ class Gather
     {
         $this->bookId = $id;
         if (!empty($rule)) {
-            $this->rule = $rule[array_rand($rule)];
+            $this->rule = $rule;
         } else {
             throw new Exception('采集配置不存在！');
         }

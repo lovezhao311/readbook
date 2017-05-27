@@ -9,6 +9,8 @@ class Book extends Model
 
     protected $type = [
         'gather' => 'array',
+        'tags' => 'array',
+        'types' => 'array',
     ];
     /**
      * 关联标签
@@ -16,9 +18,19 @@ class Book extends Model
      * @DateTime 2017-05-10T12:03:53+0800
      * @return   [type]                   [description]
      */
-    public function tags()
+    public function tag()
     {
         return $this->belongsToMany('Tags', 'book_tags');
+    }
+    /**
+     * 推荐
+     * @method   type
+     * @DateTime 2017-05-27T11:29:39+0800
+     * @return   [type]                   [description]
+     */
+    public function type()
+    {
+        return $this->hasMany('BookType', 'book_id', 'id');
     }
     /**
      * 列表页面

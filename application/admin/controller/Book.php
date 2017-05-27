@@ -39,14 +39,21 @@ class Book extends Controller
             Db::startTrans();
             try {
                 $book = new BookModel;
-                $data['gather'] = $this->setGather($data['gather']);
                 $this->save($book, [], 'add', $data);
-                // 添加现在的数据
+                // 保存tags
                 if (isset($data['tags'])) {
-                    $tags = array_values($data['tags']);
+                    $tags = array_keys($data['tags']);
                     if (!empty($tags)) {
-                        $book->tags()->attach($tags);
+                        $book->tag()->attach($tags);
                     }
+                }
+                // 保存推荐类型
+                if (!empty($data['types'])) {
+                    $types = array_map(function ($value) {
+                        return ['type' => $value];
+                    }, $data['types']);
+
+                    $book->type()->saveAll($types);
                 }
                 Db::commit();
             } catch (Exception $e) {
@@ -78,25 +85,26 @@ class Book extends Controller
             $data = $this->request->post('data/a');
             Db::startTrans();
             try {
-
-                $data['gather'] = $this->setGather($data['gather']);
+                $oldtags = $book->tags;
                 $this->save($book, [], 'edit', $data);
+
+                // 删除标签
+                $book->tag()->detach();
                 // 标签修改
                 if (isset($data['tags'])) {
-                    $oldtags = collection($book->tags()->column('tags.id'))->column('id');
-                    $tags = array_values($data['tags']);
-                    $deltags = array_values(array_diff($oldtags, $tags));
-                    // 删除标签书籍数据
-                    if (!empty($deltags)) {
-                        $book->tags()->detach($deltags);
-                    }
-                    $addtags = array_values(array_diff($tags, $oldtags));
-                    // 添加现在的数据
-                    if (!empty($addtags)) {
-                        $book->tags()->attach($addtags);
-                    }
-                } else {
-                    $book->tags()->detach();
+                    $tags = array_keys($data['tags']);
+                    $book->tag()->attach($tags);
+                }
+                // 如果 之前有推荐类型
+                $book->type()->delete();
+                // 保存推荐类型
+                if (!empty($data['types'])) {
+                    // 添加
+                    $types = array_map(function ($value) {
+                        return ['type' => $value];
+                    }, $data['types']);
+
+                    $book->type()->saveAll($types);
                 }
 
                 Db::commit();
@@ -108,7 +116,6 @@ class Book extends Controller
             }
             $this->success('修改书籍[id:' . $book->id . ']', 'index');
         }
-
         $this->assign('book', $book);
         $this->assign('gathers', GatherModel::all());
         $this->assign('authors', AuthorModel::all());
@@ -131,25 +138,6 @@ class Book extends Controller
             $this->error($e->getMessage());
         }
         $this->success('删除书籍[id:' . $id . ']');
-    }
-
-    /**
-     * 采集源数据处理
-     * @method   setGatherAtt
-     * @DateTime 2017-05-10T11:55:55+0800
-     */
-    protected function setGather($gather)
-    {
-        $array = [];
-        if (empty($gather['gather_id'])) {
-            return $array;
-        }
-        foreach ($gather['gather_id'] as $key => $value) {
-            $array[$value]['gather_id'] = $value;
-            $array[$value]['list_url'] = $gather['list_url'][$key];
-            $array[$value]['sort'] = $gather['sort'][$key];
-        }
-        return $array;
     }
 
 }

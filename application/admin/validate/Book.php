@@ -14,17 +14,18 @@ class Book extends Validate
         'source_id|书籍来源' => ['exist:source,id'],
         'tags|书籍标签' => ['array'],
         'gather|书籍采集源' => ['array'],
+        'types|书籍推荐' => ['array'],
         'remark|书籍说明' => ['max:255'],
         'end_status|完结状态' => ['require', 'in:1,2'],
     ];
 
     protected $scene = [
-        'add' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status'],
-        'edit' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status'],
+        'add' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
+        'edit' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
     ];
 
     protected $requireField = [
-        'add' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status'],
-        'edit' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status'],
+        'add' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
+        'edit' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
     ];
 }

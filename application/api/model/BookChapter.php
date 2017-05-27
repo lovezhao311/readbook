@@ -1,5 +1,5 @@
 <?php
-namespace app\index\model;
+namespace app\api\model;
 
 use think\Model;
 
@@ -14,7 +14,11 @@ class BookChapter extends Model
      */
     protected function scopeList($query)
     {
-        $query->field(['id', 'name', 'word_count', 'group'])->order('create_time');
+        $query->alias('a')
+            ->field(['id', 'name', 'create_time'], false, 'book_chapter')
+            ->field(['id', 'name'], false, 'book_subsection', 'bs', 'subsection_')
+            ->join('book_subsection bs', 'bs.id=a.subsection_id')
+            ->order('bs.sort ASC, bs.id ASC, a.id ASC');
     }
 
     /**
@@ -29,6 +33,6 @@ class BookChapter extends Model
         $query->alias('a')
             ->join('book b', 'b.id=a.book_id')
             ->field(['id', 'name', 'status', 'content'], false, 'book_chapter')
-            ->field(['id', 'gather', 'name'], false, 'book', 'b', 'book_');
+            ->field(['gather', 'name', 'id'], false, 'book', 'b', 'book_');
     }
 }
