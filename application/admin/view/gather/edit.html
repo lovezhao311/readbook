@@ -8,6 +8,19 @@
                 <input type="text" name="data[name]" value="{$gather.name}" autocomplete="off" placeholder="采集名称" class="layui-input">
             </div>
         </div>
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>搜索页面</label>
+            <div class="layui-input-block">
+                <input type="text" name="data[search]" value="{$gather.search}" autocomplete="off" placeholder="搜索页面" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="field-tip">*</span>搜索页面正则</label>
+            <div class="layui-input-block">
+                <input type="text" name="data[search_regular]" value="{$gather.search_regular}" autocomplete="off" placeholder="搜索页面正则" class="layui-input">
+            </div>
+        </div>
 
         {if condition="empty($gather['title'])"}
         <div class="layui-form-item">

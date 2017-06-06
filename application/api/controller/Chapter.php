@@ -20,19 +20,10 @@ class Chapter extends Controller
         set_time_limit(0);
         $data = $this->request->get();
 
-        $query = BookChapterModel::scope('show')->where('b.id', $data['book_id']);
-        switch ($data['type']) {
-            case 'chapter':
-                ($data['id'] != 0) && $query->where('a.id', $data['id']);
-                break;
-            case 'lastpage':
-                $query->where('a.id', '<', $data['id']);
-                break;
-            case 'nextpage':
-                $query->where('a.id', '>', $data['id']);
-                break;
+        $chapter = BookChapterModel::scope('show')->where('b.id', $data['book_id'])->where('a.id', $data['id'])->find();
+        if (empty($chapter)) {
+            $this->error('没有章节了!~~');
         }
-        $chapter = $query->find();
 
         if ($chapter['status'] == 0) {
             try {

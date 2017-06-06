@@ -8,11 +8,11 @@ class Book extends Validate
     protected $rule = [
         'name|书籍名称' => ['require', 'chsDash', 'max:100', 'unique:book,name'],
         'alias|书籍别名' => ['require', 'max:100'],
-        'image|书籍封面' => ['postfix:jpg,gif,png'],
+        'image|书籍封面' => ['require'],
         'isbn|书籍ISBN号' => ['max:20', 'alphaNum'],
-        'author_id|书籍作者' => ['exist:author,id'],
+        'author_name|书籍作者' => ['max:50'],
         'source_id|书籍来源' => ['exist:source,id'],
-        'tags|书籍标签' => ['array'],
+        'tags|书籍标签' => ['exist:tags,id'],
         'gather|书籍采集源' => ['array'],
         'types|书籍推荐' => ['array'],
         'remark|书籍说明' => ['max:255'],
@@ -20,12 +20,12 @@ class Book extends Validate
     ];
 
     protected $scene = [
-        'add' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
-        'edit' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
+        'add' => ['name', 'alias', 'image', 'isbn', 'author_name', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
+        'edit' => ['name', 'alias', 'image', 'isbn', 'author_name', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
     ];
 
     protected $requireField = [
-        'add' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
-        'edit' => ['name', 'alias', 'image', 'isbn', 'author_id', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
+        'add' => ['name', 'alias', 'image', 'isbn', 'author_name', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
+        'edit' => ['name', 'alias', 'image', 'isbn', 'author_name', 'source_id', 'tags', 'gather', 'remark', 'end_status', 'types'],
     ];
 }

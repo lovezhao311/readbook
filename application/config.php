@@ -31,7 +31,7 @@ return [
 
     'log' => [
         // 日志记录方式，内置 file socket 支持扩展
-        'type' => 'socket',
+        'type' => 'file',
         'host' => 'slog.thinkphp.cn',
         // 'force_client_ids' => ['slog_bd4ff4'],
         'show_included_files' => true,

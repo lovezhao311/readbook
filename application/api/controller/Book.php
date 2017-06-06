@@ -1,9 +1,11 @@
 <?php
 namespace app\api\controller;
 
+use app\admin\library\CheckUpdate;
 use app\api\model\Book as BookModel;
 use app\api\model\BookChapter as BookChapterModel;
 use think\Controller;
+use think\Exception;
 
 class Book extends Controller
 {
@@ -15,7 +17,20 @@ class Book extends Controller
      */
     public function index()
     {
-        $lists = BookModel::scope('list')->limit(4)->select();
+        $data = $this->request->get();
+
+        $query = BookModel::scope('search');
+
+        $where = [];
+        // 推荐类型搜索
+        if (isset($data['type']) && !empty($data['type'])) {
+            $query = BookModel::scope('search,type')->where('bt.type', $data['type']);
+        }
+        // 连载状态
+        if (isset($data['end_status']) && !empty($data['end_status'])) {
+            $query->where('a.end_status', $data['end_status']);
+        }
+        $lists = $query->limit(4)->select();
         $this->result($lists, 1);
     }
     /**
@@ -32,6 +47,23 @@ class Book extends Controller
         $this->success('成功', '', $book);
     }
     /**
+     * 检查是否更新
+     * @method   checkupdate
+     * @DateTime 2017-06-05T13:57:50+0800
+     * @return   [type]                   [description]
+     */
+    public function checkupdate()
+    {
+        $id = $this->request->get('id');
+        try {
+            $check = new CheckUpdate('api');
+            $check->check($id);
+        } catch (Exception $e) {
+            $this->error($e->getMessage());
+        }
+        $this->success('成功');
+    }
+    /**
      * 章节
      * @method   chapter
      * @DateTime 2017-05-13T13:06:22+0800
@@ -42,7 +74,7 @@ class Book extends Controller
     public function chapter()
     {
         $id = $this->request->get('id');
-        $chapters = BookChapterModel::scope('list')->where('a.book_id', $id)->paginate(100);
+        $chapters = BookChapterModel::scope('list')->where('a.book_id', $id)->select();
         $this->success('成功', '', $chapters);
     }
 }

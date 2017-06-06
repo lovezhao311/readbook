@@ -2,10 +2,10 @@
 namespace app\admin\controller;
 
 use app\admin\library\Controller;
-use app\admin\model\Author as AuthorModel;
 use app\admin\model\Book as BookModel;
 use app\admin\model\Gather as GatherModel;
 use app\admin\model\Source as SourceModel;
+use app\admin\model\Tags as TagsModel;
 use think\Db;
 use think\Exception;
 
@@ -39,14 +39,8 @@ class Book extends Controller
             Db::startTrans();
             try {
                 $book = new BookModel;
+                $data['gather'] = $this->setGather($data['gather']);
                 $this->save($book, [], 'add', $data);
-                // 保存tags
-                if (isset($data['tags'])) {
-                    $tags = array_keys($data['tags']);
-                    if (!empty($tags)) {
-                        $book->tag()->attach($tags);
-                    }
-                }
                 // 保存推荐类型
                 if (!empty($data['types'])) {
                     $types = array_map(function ($value) {
@@ -62,8 +56,9 @@ class Book extends Controller
             }
             $this->success('添加书籍[id:' . $book->id . ']', 'index');
         }
+
+        $this->assign('tags', TagsModel::all());
         $this->assign('gathers', GatherModel::all());
-        $this->assign('authors', AuthorModel::all());
         $this->assign('sources', SourceModel::all());
         return $this->fetch();
     }
@@ -85,16 +80,9 @@ class Book extends Controller
             $data = $this->request->post('data/a');
             Db::startTrans();
             try {
-                $oldtags = $book->tags;
-                $this->save($book, [], 'edit', $data);
 
-                // 删除标签
-                $book->tag()->detach();
-                // 标签修改
-                if (isset($data['tags'])) {
-                    $tags = array_keys($data['tags']);
-                    $book->tag()->attach($tags);
-                }
+                $data['gather'] = $this->setGather($data['gather']);
+                $this->save($book, [], 'edit', $data);
                 // 如果 之前有推荐类型
                 $book->type()->delete();
                 // 保存推荐类型
@@ -110,15 +98,13 @@ class Book extends Controller
                 Db::commit();
             } catch (Exception $e) {
                 Db::rollback();
-                throw $e;
-
                 $this->error($e->getMessage());
             }
             $this->success('修改书籍[id:' . $book->id . ']', 'index');
         }
         $this->assign('book', $book);
+        $this->assign('tags', TagsModel::all());
         $this->assign('gathers', GatherModel::all());
-        $this->assign('authors', AuthorModel::all());
         $this->assign('sources', SourceModel::all());
         return $this->fetch();
     }
@@ -138,6 +124,24 @@ class Book extends Controller
             $this->error($e->getMessage());
         }
         $this->success('删除书籍[id:' . $id . ']');
+    }
+
+    /**
+     * 采集源数据处理
+     * @method   setGatherAtt
+     * @DateTime 2017-05-10T11:55:55+0800
+     */
+    protected function setGather($gather)
+    {
+        $array = [];
+        if (empty($gather['gather_id'])) {
+            return $array;
+        }
+        foreach ($gather['gather_id'] as $key => $value) {
+            $array[$value]['gather_id'] = $value;
+            $array[$value]['list_url'] = $gather['list_url'][$key];
+        }
+        return $array;
     }
 
 }

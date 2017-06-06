@@ -13,6 +13,9 @@ body[login] .layui-form{
     left: 50%;
     transform: translate(-50%, -50%);
 }
+.layui-layer-content{
+    padding: 10px;
+}
 body[login] .layui-input,body[login] .layui-select,body[login] .layui-textarea,body[login] .layui-form-pane .layui-form-label{
     border: 1px solid #bfbfbf;
     border-radius: 0;

@@ -1,10 +1,10 @@
 
 @font-face {font-family: "wx-iconfont";
-  src: url('iconfont.eot?t=1495679480351'); /* IE9*/
-  src: url('iconfont.eot?t=1495679480351#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1495679480351') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1495679480351') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1495679480351#wx-iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1496631593558'); /* IE9*/
+  src: url('iconfont.eot?t=1496631593558#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1496631593558') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1496631593558') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1496631593558#wx-iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .wx-iconfont {
@@ -18,6 +18,8 @@
 .wx-gengduo:before { content: "\e766"; }
 
 .wx-wo:before { content: "\e607"; }
+
+.wx-loading:before { content: "\e639"; }
 
 .wx-icon1607:before { content: "\e638"; }
 

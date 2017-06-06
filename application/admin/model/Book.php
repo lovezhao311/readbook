@@ -9,19 +9,8 @@ class Book extends Model
 
     protected $type = [
         'gather' => 'array',
-        'tags' => 'array',
         'types' => 'array',
     ];
-    /**
-     * 关联标签
-     * @method   tags
-     * @DateTime 2017-05-10T12:03:53+0800
-     * @return   [type]                   [description]
-     */
-    public function tag()
-    {
-        return $this->belongsToMany('Tags', 'book_tags');
-    }
     /**
      * 推荐
      * @method   type
@@ -42,10 +31,8 @@ class Book extends Model
     protected function scopeList($query)
     {
         $query->alias('a')
-            ->field(['id', 'name', 'isbn', 'end_status'], false, 'book')
-            ->field(['name'], false, 'author', 'au', 'author_')
+            ->field(['id', 'name', 'isbn', 'end_status', 'author_name'], false, 'book')
             ->field(['name'], false, 'source', 'so', 'source_')
-            ->join('author au', 'au.id=a.author_id', 'left')
             ->join('source so', 'so.id=a.source_id', 'left');
     }
 

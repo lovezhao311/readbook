@@ -293,4 +293,5 @@ class UpdateChapter extends Command
         }
         return $csrf;
     }
+
 }

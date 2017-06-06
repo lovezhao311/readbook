@@ -238,7 +238,7 @@ layui.define(['layer', 'code', 'form', 'element', 'util', 'laytpl', 'laypage', '
             type: 2,
             icon: 1,
             area: ['900px', '700px'],
-            content: [url + '?params=' + params, 'no']
+            content: [url + '?params=' + params]
         });
     });
     /**

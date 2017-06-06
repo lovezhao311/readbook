@@ -9,7 +9,7 @@ class Book extends Search
         'index' => [
             'isbn' => ['whereLike', 'a.isbn'],
             'name' => ['whereLike', 'a.name'],
-            'author' => ['whereLike', 'au.name'],
+            'author_name' => ['whereLike', 'a.author_name'],
             'end_status' => ['where', 'a.end_status'],
         ],
     ];

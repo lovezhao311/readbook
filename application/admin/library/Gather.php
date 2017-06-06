@@ -19,6 +19,11 @@ class Gather
      */
     protected $rule = [];
     /**
+     * 应用的规则KEY
+     * @var int
+     */
+    protected $key = 0;
+    /**
      * 构造函数
      * @method   __construct
      * @DateTime 2017-05-11T16:15:26+0800
@@ -43,30 +48,37 @@ class Gather
      */
     public function chapter(Model $bookChapter)
     {
-        $gather = $this->getGather();
-        $bookDom = $this->load($this->rule['list_url']);
-        $lists = $bookDom->find($gather['list']);
-        $title = $this->title($bookChapter['name'], $gather['title']);
+        $content = null;
+        foreach ($this->rule as $key => $rule) {
+            //s
+            $this->key = $key;
 
-        $href = '';
-        if (!empty($lists)) {
-            foreach ($lists as $list) {
-                if ($title == $list->getPlainText()) {
-                    $href = $list->href;
+            $gather = $this->getGather();
+            //
+            $bookDom = $this->load($rule['list_url']);
+            $lists = $bookDom->find($gather['list']);
+            $title = $this->title($bookChapter['name'], $gather['title']);
+
+            $href = '';
+            if (!empty($lists)) {
+                foreach ($lists as $list) {
+                    if (trim($title) == trim($list->getPlainText())) {
+                        $href = $list->href;
+                    }
                 }
             }
-        }
 
-        if (empty($href)) {
-            throw new Exception('未采集到该章节！');
-        }
+            if (empty($href)) {
+                continue;
+            }
 
-        $content = $this->getContent($href, $gather);
-        if ($content == null) {
-            throw new Exception('采集失败！');
+            $content = $this->getContent($href, $gather);
+            if ($content == null) {
+                continue;
+            }
+            $this->updateChapter($bookChapter, $content);
+            break;
         }
-
-        $this->updateChapter($bookChapter, $content);
         return $content;
     }
     /**
@@ -121,9 +133,9 @@ class Gather
     {
         if (substr($append, 0, 1) == '/') {
             $append = substr($append, 1);
-            $local = $this->getHost($this->rule['list_url']);
+            $local = $this->getHost($this->rule[$this->key]['list_url']);
         } else {
-            $local = $this->getHost($this->rule['list_url'], true);
+            $local = $this->getHost($this->rule[$this->key][$this->key]['list_url'], true);
         }
         return $local . $append;
     }
@@ -181,7 +193,7 @@ class Gather
      */
     protected function getGather()
     {
-        return GatherModel::get($this->rule['gather_id']);
+        return GatherModel::get($this->rule[$this->key]['gather_id']);
     }
     /**
      * 获取文件 本地&远程
